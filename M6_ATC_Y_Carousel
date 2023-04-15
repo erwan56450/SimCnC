@@ -173,7 +173,7 @@ if hold_tool != new_tool: #si new tool = hold tool alors n'oppère pas de change
     #-----------------------------------------------------------
 
     if 1 <= hold_tool <= Tool_Count: #vérifi que l'outil n'est pas zero ou plus que tool_count
-        hold_tool_position_A = (C_position_last_tool - C_position_first_tool) / (Tool_Count - 1) * (hold_tool) #calcul de l'écatement etre chaques rangement.
+        hold_tool_position_A = ((C_position_last_tool - C_position_first_tool) / (Tool_Count - 1)) * (hold_tool-1) #calcul de l'écatement etre chaques rangement.
         print(f"hold tool va etre ranger a la posistion : {hold_tool}")
     else:
         print(f"Le numéro de l'outil actuel ({hold_tool}) dépasse le nombre maximal d'outils autorisé ({Tool_Count})")
@@ -231,7 +231,7 @@ if hold_tool != new_tool: #si new tool = hold tool alors n'oppère pas de change
     #-----------------------------------------------------------
 
     if 1 <= new_tool <= Tool_Count: #vérifi que l'outil n'est pas zero ou plus que tool_count
-        new_tool_position_A = (C_position_last_tool - C_position_first_tool) / (Tool_Count - 1) * (new_tool) #calcul de l'écatement etre chaques rangement.
+        new_tool_position_A = ((C_position_last_tool - C_position_first_tool) / (Tool_Count - 1)) * (new_tool-1) #calcul de l'écatement etre chaques rangement.
         print(f"récupération de l'outil : {new_tool}")
     else:
         print(f"Le numéro de l'outil new tool  ({new_tool}) dépasse le nombre maximal d'outils autorisé ({Tool_Count})")
