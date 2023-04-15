@@ -13,14 +13,14 @@
 # vitesse (speed)
 Z_speed_down = 2000                 # vitesse Z en décente 
 Z_speed_up = 3000                   # viteese de lever du Z (speed to lift Z)
-X_speed = 2000                      # Vitesse  X (speed of 
-X_speed_final = 500                 # Vitesse  X d'aproche finale pour ranger l'outil
+Y_speed = 2000                      # Vitesse  X (speed of 
+Y_speed_final = 500                 # Vitesse  X d'aproche finale pour ranger l'outil
 C_speed = 1000                      # vitesse de C "porte outils"
 
 # positions
 time_spindle_stop = 8               # temps en seconde  de l'arrete de votre broche avec l'outil le plus lourd (time in seconds for the stop of your spindel with the heaviest tool)
-X_approch = -1750                   # position X de la broche avant de rentrer l'outil de la port outil
-X_tool_clamp= -1800                 # position machine final la broche dans un porte outil
+Y_approch = -1750                   # position X de la broche avant de rentrer l'outil de la port outil
+Y_tool_clamp= -1800                 # position machine final la broche dans un porte outil
 Z_position_clean = -180             # distance a la quel le z descent pour nettoyage du cone
 Z_position_tools = -206             # emplacement Z ou l'outil est libéré (location where the tool is released)
 C_position_first_tool = 100         # position de C quand la fraise est en place dans le tourniquet a la position 1
@@ -199,8 +199,8 @@ if hold_tool != new_tool: #si new tool = hold tool alors n'oppère pas de change
     d.ignoreAllSoftLimits(True)
 
     # déplacement X avant le tourniquet
-    position[X] = X_approch
-    d.moveToPosition(CoordMode.Machine, position, X_speed)
+    position[Y] = Y_approch
+    d.moveToPosition(CoordMode.Machine, position, Y_speed)
 
     # calcule le temps écoulé depuis le lancement du chronometre et fait une pause si le temps comfiguré time_spindel_stop n'est pas écoulé (Calculates the elapsed time since the timer was started and pauses if the configured time_spindle_stop is not elapsed.)
     time_spent = time.time() - start_time_stop_spin
@@ -213,8 +213,8 @@ if hold_tool != new_tool: #si new tool = hold tool alors n'oppère pas de change
     d.moveToPosition(CoordMode.Machine, position, Z_speed_down)
 
     # déplacement X  dans la pince
-    position[X] = X_tool_clamp
-    d.moveToPosition(CoordMode.Machine, position, X_speed_final) 
+    position[Y] = Y_tool_clamp
+    d.moveToPosition(CoordMode.Machine, position, Y_speed_final) 
 
     # Libert l'outil (release the tool)
     set_digital_output(valve_collet, DIOPinVal.PinSet)
@@ -264,8 +264,8 @@ if hold_tool != new_tool: #si new tool = hold tool alors n'oppère pas de change
     set_digital_output(valve_collet, DIOPinVal.PinReset)
 
     # X sort de la pince
-    position[X] = X_approch
-    d.moveToPosition(CoordMode.Machine, position, X_speed_final)
+    position[X] = Y_approch
+    d.moveToPosition(CoordMode.Machine, position, Y_speed_final)
 
     # Déplacer l'axe Z en zero
     position[Z] = 0
@@ -295,7 +295,7 @@ if do_i_have_prob == True:
 
         # deplacement en X safe zone , evite les colision avec les outils rangés
         position[X] = probeStartAbsPos['X_probe']
-        d.moveToPosition(CoordMode.Machine, position, X_speed)
+        d.moveToPosition(CoordMode.Machine, position, Y_speed)
 
         # desente Z rapide, l'outil ne doit pas toucher le prob encore
         position[Axis.Z.value] = probeStartAbsPos['Z_probe']
@@ -365,7 +365,7 @@ d.setSpindleToolNumber(new_tool)
 
 # dégage du tourniquet ou du palpeur a la position X enregistré au debut du script
 position[X] = X_coord
-d.moveToPosition(CoordMode.Machine, position, X_speed)
+d.moveToPosition(CoordMode.Machine, position, Y_speed)
 
 # stop la valve pour le cache poussière
 set_digital_output(valve_dust_colector, DIOPinVal.PinReset)
