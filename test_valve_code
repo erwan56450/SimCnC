@@ -1,10 +1,14 @@
+# Tester vos sorties numeriques sans vous fatiguer
+# Test your digital outputs without getting tired
+
+
 import time
 
 # Définissez le numéro de sortie numérique ici avec un nom spécifique
-valve_collet = 13
-valve_dust_colector = None
-valve_clean_cone = 15
-valve_nozel = 12
+valve_collet = 13           # cone porte outils
+valve_dust_colector = None  # récupérateur de poussières
+valve_clean_cone = 15       # Nettoyage du cone
+valve_nozel = 12            # Soufflette
 
 # Dictionnaire pour associer les noms de valves à leurs numéros
 valve_names = {valve_collet: "valve_collet",
