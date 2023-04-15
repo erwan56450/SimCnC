@@ -1,3 +1,4 @@
+# Copier/Coller ce code Dans SimCNC>macroEditor>file>open>M6 
 
 # Code python pour changer d'outil sur fraise ATC automatiqueement et le mesurer si sa valeur dans la table d'outils est =0 sinon ne le mesure pas.
 # (Python code to automatically change the tool on an ATC router and measure it if its value in the tool table is = 0, otherwise don't measure it)
