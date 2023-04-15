@@ -4,7 +4,7 @@
 
 import time
 
-# Définissez le numéro de sortie numérique ici avec un nom spécifique
+# Définissez le numéro de sortie numérique ici None = pas configuré 
 valve_collet = 13           # cone porte outils
 valve_dust_colector = None  # récupérateur de poussières
 valve_clean_cone = 15       # Nettoyage du cone
