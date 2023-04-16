@@ -4,13 +4,12 @@
 #######################################################################
 # Définissez le numéro de sortie numérique ici None = pas configuré
 valve_collet = 13           # cone porte outils
-valve_dust_colector = None  # récupérateur de poussières
+valve_dust_colector = None  # déplacement du récupérateur de poussières
 valve_clean_cone = 15       # Nettoyage du cone
 valve_nozel = 12            # Soufflette
-water_pomp = None
-dust_collection = None
-vacuum_pump = None
-valve_dor = None
+valve_dor = None            # ouverture trappe outils/tourniquet
+dust_collection = None      # démarrage de l'aspiration
+vacum_pump = None           # pompe/table a vide
 #######################################################################
 
 # début du script
@@ -20,12 +19,12 @@ valve_names = {valve_collet: "valve_collet",
                valve_dust_colector: "valve_dust_colector",
                valve_clean_cone: "valve_clean_cone",
                valve_nozel: "valve_nozel",
-               water_pomp: "water_pomp",
+               valve_dor: "valve_dor",
                dust_collection: "dust_collection",
-               vacuum_pump: "vacuum_pump"}
+               vacum_pump: "vacum_pump"}
 
 # Liste des sorties
-output_list = [valve_collet, valve_dust_colector, valve_clean_cone, valve_nozel, water_pomp, dust_collection, vacuum_pump]
+output_list = [valve_collet, valve_dust_colector, valve_clean_cone, valve_nozel, valve_dor, dust_collection, vacum_pump]
 
 
 # Modifie la sortie digital
