@@ -2,26 +2,31 @@
 # Test your digital outputs without getting tired
 
 #######################################################################
-# Définissez le numéro de sortie numérique ici None = pas configuré 
+# Définissez le numéro de sortie numérique ici None = pas configuré
 valve_collet = 13           # cone porte outils
 valve_dust_colector = None  # récupérateur de poussières
 valve_clean_cone = 15       # Nettoyage du cone
 valve_nozel = 12            # Soufflette
+water_pomp = None
+dust_collection = None
+vacuum_pump = None
+valve_dor = None
 #######################################################################
 
-
-
-# debut du script
-import time
+# début du script
 
 # Dictionnaire pour associer les noms de valves à leurs numéros
 valve_names = {valve_collet: "valve_collet",
                valve_dust_colector: "valve_dust_colector",
                valve_clean_cone: "valve_clean_cone",
-               valve_nozel: "valve_nozel"}
+               valve_nozel: "valve_nozel",
+               water_pomp: "water_pomp",
+               dust_collection: "dust_collection",
+               vacuum_pump: "vacuum_pump"}
 
 # Liste des sorties
-output_list = [valve_collet, valve_dust_colector, valve_clean_cone, valve_nozel]
+output_list = [valve_collet, valve_dust_colector, valve_clean_cone, valve_nozel, water_pomp, dust_collection, vacuum_pump]
+
 
 # Modifie la sortie digital
 def set_digital_output(output_number, value):
@@ -29,7 +34,7 @@ def set_digital_output(output_number, value):
         mod_IP = d.getModule(ModuleType.IP, 0)
         mod_IP.setDigitalIO(output_number, value)
     except NameError:
-        print("Variable non définie.")  # message d'erreur
+        print("Variable incorect définir un chiffre ou None si non utilisé")  # message d'erreur
 
 # Boucle pour activer et désactiver les sorties numériques
 for output in output_list:
