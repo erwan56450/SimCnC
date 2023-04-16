@@ -10,12 +10,36 @@
 # Donc a chaques remplacement de fraises je vous pourez cliquer sur ce bouton.
 
 
-for tool_table in range(1, 100): #reset les tailles d'outils de 1 a 100
-    n_tool = tool_table
-    current_tool_length = d.getToolLength(n_tool)
+import tkinter as tk
 
-    if current_tool_length != 0:
-        d.setToolLength(n_tool, 0)
-        print(f"La mesure de l'outil {n_tool} a été réinitialisée")
-    
-print(" Toutes les mesures de vos outils ont été réinitialisées")
+def reset_tool_length():
+    for tool_table in range(1, 100): #reset les tailles d'outils de 1 a 100
+        n_tool = tool_table
+        current_tool_length = d.getToolLength(n_tool)
+
+        if current_tool_length != 0:
+            d.setToolLength(n_tool, 0)
+            print(f"The measurement of tool {n_tool} has been reset.")
+        
+    print(" All tool measurements have been reset.")
+    root.destroy()
+
+def cancel_reset():
+    root.destroy()
+
+root = tk.Tk()
+root.title("Reset Tool Length")
+message = "Are you sure you want to reset all tool lengths?"
+label = tk.Label(root, text=message)
+label.pack(pady=10)
+
+button_frame = tk.Frame(root)
+button_frame.pack()
+
+ok_button = tk.Button(button_frame, text="Reset All", command=reset_tool_length)
+ok_button.pack(side=tk.LEFT, padx=5)
+
+cancel_button = tk.Button(button_frame, text="Cancel", command=cancel_reset)
+cancel_button.pack(side=tk.LEFT, padx=5)
+
+root.mainloop()

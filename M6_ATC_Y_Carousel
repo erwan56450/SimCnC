@@ -292,7 +292,7 @@ else:
 #regarde au debut du code si oui ou non la mesure doit etre lancée (exemple :si vous n'avez pas de palpeur)
 if do_i_have_prob == True: 
    
-    if new_tool_length == 0 or every_time_get_measure == True:  # Vérifit si la longueur de l'outil new_tool dans simCNC est 0 (non mesurée) ou Si la mesure doit etre effectuer a chaques fois.
+    if new_tool_length == 0 or every_time_get_measure == True:  # Vérifit si la longueur de l'outil new_tool dans simCNC est = 0 (non mesurée) ou Si la mesure doit etre effectuer a chaques fois.
         print(f"L'outil {new_tool} va etre mesuré.")
 
         # deplacement en Y au dessus du palpeur
