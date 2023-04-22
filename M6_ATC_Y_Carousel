@@ -72,8 +72,8 @@ import sys                          # pour utiliser la fonction sys.exit() (to u
 #-----------------------------------------------------------
 # Fonction regarde si un outil est en place , sinon stop le programe
 # Copier/Coller les 2 phrases si dessous a l'endroit souhaité dans le code a partir de #Debut de la macro
-# Read_if_tool_in (check_tool_in_spindel)   ----->pour ma fraise ce capteur doit etre ON
-# Read_if_tool_in (check_clamp_status)      ----->pour ma fraise ce capteur doit etre OFF
+# Read_if_tool_in (check_tool_in_spindel)
+# Read_if_tool_in (check_clamp_status)
 #-----------------------------------------------------------
 
 def Read_if_tool_in (input_number):
@@ -99,8 +99,8 @@ def Read_if_tool_in (input_number):
 #-----------------------------------------------------------
 # Fonction regarde si l'outil a bien été libéré, "délivré" sinon stop le programe
 # Copier/Coller les 2 phrases si dessous a l'endroit souhaité dans le code
-# Read_if_tool_out (check_tool_in_spindel)      ----->pour ma fraise ce capteur doit etre OFF
-# Read_if_tool_out (check_clamp_status)         ----->pour ma fraise ce capteur doit etre ON
+# Read_if_tool_out (check_tool_in_spindel)     
+# Read_if_tool_out (check_clamp_status)
 #-----------------------------------------------------------
 
 
@@ -233,6 +233,9 @@ if hold_tool != new_tool: #si new tool = hold tool alors n'oppère pas de change
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
 
+    Read_if_tool_out (check_tool_in_spindel)     
+    Read_if_tool_out (check_clamp_status)
+
     #-----------------------------------------------------------
     #Mouvement du tourniquet sur new_tool
     #-----------------------------------------------------------
@@ -277,6 +280,9 @@ if hold_tool != new_tool: #si new tool = hold tool alors n'oppère pas de change
     # Déplacer l'axe Z en zero
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
+
+    Read_if_tool_in (check_tool_in_spindel)
+    Read_if_tool_in (check_clamp_status)
 
     #imprime dans la console
     print("-------------------\n fin du changement d'outil \n--------------------")
