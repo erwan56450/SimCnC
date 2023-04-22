@@ -26,7 +26,7 @@ except ImportError:
 # Importe le tradution du fichier multilingual.py a placer dans le meme répèretoir que M6
 #-----------------------------------------------------------
 try:
-    from multilingual import _
+    from ATC_X_table.multilingual import _
 except ModuleNotFoundError:
     print("The multilingual.py file cannot be found. Translations will not be available.")
     
