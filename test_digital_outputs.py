@@ -9,7 +9,7 @@ valve_clean_cone = 15       # Nettoyage du cone
 valve_nozel = 12            # Soufflette
 valve_dor = None            # ouverture trappe outils/tourniquet
 dust_collection = None      # démarrage de l'aspiration
-vacum_pump = None           # pompe/table a vide
+vacum_pump = None           # pompe a vide /table a déprésion
 #######################################################################
 
 # début du script

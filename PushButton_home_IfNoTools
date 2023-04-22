@@ -1,0 +1,17 @@
+# tester le code dans la console... SI ca fonctionne
+# Save the code here C:\Program Files\simCNC\screens\default\scripts\HomingPerso.py
+# Ouvrir l'editeur d'interface Simcnc > Configuration > openGUIeditor > selectionner le bouton par defaut du homing.
+# dans le fenetre GUI editor (une fois le bouton home selectioné) en bas a droite cliquer sur "OUPUT: clicked > "ref all Axes"  replacer par "RUN SCRIPT" et selectioner HomingPerso.py ")
+
+check_tool_in_spindel = 24 # Numero de l'entrée a vérifier si off avant le homing # None =ignoré
+
+if check_tool_in_spindel is not None: # Vérifie si l'entrée n'est pas configurée sur None
+    mod_IP = d.getModule(ModuleType.IP, 0) # Appelle le module CSMIO IP-S
+    if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.PinSet: # PinSet = allumé
+        msg.info("Retirez l'outil dans la broche avant le homing", "Info")# Affiche un message dans la console
+        sys.exit(1) # Arrête le programme
+    elif mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.PinReset: # PinReset = éteint
+        print("Début du homing") # Affiche un message dans la console passe au homing
+
+#execute home
+d.executeHoming()

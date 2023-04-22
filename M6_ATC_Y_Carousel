@@ -3,7 +3,7 @@
 # Erwan Le Foll 04/03/2022   version 0.5   https://youtube.com/@erwan3953
 
 # Script de changement d'outil automatique pour un chargeur d'outil avec TOURNIQUET
-# ici le moteur du tourniquet est sur l'axe C en degrés ou en mm.
+# ici le moteur du tourniquet est sur l'axe C en degrés (ou Lineair mm.) pour les Axes en degré comfigurer> axes> C> RotaryType (1->360) permet de prendre le chemain le plus court
 
 
 #-----------------------------------------------------------
@@ -23,13 +23,15 @@ Y_approch = -230                    # position y de la broche avant de rentrer l
 Y_tool_clamp= -300                  # position y final de la broche dans un porte outil
 Z_position_clean = -120             # distance a la quel le z descent pour nettoyage du cone
 Z_position_tools = -150             # emplacement Z ou l'outil est libéré (location where the tool is released)
+
+#Carouselle                         # Important, le homming du carouselle doit etre 0,00 ou < que C_position_first_tool 
 C_position_first_tool = 40          # position de C quand la fraise est en place dans le tourniquet a la position 1
 C_position_last_tool = 355          # position de C quand la fraise est en place dans le tourniquet a la position du dernier outil
 
 # numeros d'entrée/sorties
 Tool_Count = 8                      # Nombre max. d'outils dans le port outils
-check_tool_in_spindel = None        # Numéro de l'entrée numérique qui gère le détecteur d'outil inséré  None=desactivé (Digital input number managing the tool detection sensor)
-check_clamp_status = None           # Numéro de l'entrée numérique qui gère le détecteur d'ouverture de la griffe du conne None=desactivé (Digital input number managing the cone clamp open sensor)
+check_tool_in_spindel = None #S3    # Numéro de l'entrée numérique qui gère le détecteur d'outil inséré  None=desactivé (Digital input number managing the tool detection sensor)
+check_clamp_status = None    #S2    # Numéro de l'entrée numérique qui gère le détecteur d'ouverture de la griffe du conne None=desactivé (Digital input number managing the cone clamp open sensor)
 valve_collet = 13                   # Numéro de la sortie numérique qui gère la valve pour le changement d'outil (Digital output number managing the valve for tool change)
 valve_clean_cone = 15               # Numéro de la sortie numérique qui gère la valve pour le nettoyage du cone du porte outil (Digital output number managing the valve for tool holder cone cleaning)
 valve_blower = 12                   # Numéro de la sortie numérique qui gère la valve de la soufflette None=desactivé (Digital output number managing the valve for the blower)
@@ -69,21 +71,22 @@ import sys                          # pour utiliser la fonction sys.exit() (to u
 
 #-----------------------------------------------------------
 # Fonction regarde si un outil est en place , sinon stop le programe
-# Read_if_tool_in (check_tool_in_spindel)
-# Read_if_tool_in (check_clamp_status)
+# Copier/Coller les 2 phrases si dessous a l'endroit souhaité dans le code a partir de #Debut de la macro
+# Read_if_tool_in (check_tool_in_spindel)   ----->pour ma fraise ce capteur doit etre ON
+# Read_if_tool_in (check_clamp_status)      ----->pour ma fraise ce capteur doit etre OFF
 #-----------------------------------------------------------
 
 def Read_if_tool_in (input_number):
-    if input_number == None:  #inogre le code si entrée comfigurée sur None
+    if input_number == None:  #inogre le code si l'entrée est comfigurée sur None
         return   
-    elif input_number == check_tool_in_spindel:
+    elif input_number == check_tool_in_spindel:  #indique le numero de l'entrée a controler comfiguré au debut du code
         mod_IP = d.getModule(ModuleType.IP, 0) # apelle le csmio ip-s
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet: #pinset =allumé
-            print("Un outil a été détecté dans la broche.")
-        if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset: #pinreset = etaind
-            print("Il n'y a pas d'outil dans la broche.")
+            print("Un outil a été détecté dans la broche.") #message dans la console
+        if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset: #pinreset = éteint
+            print("Il n'y a pas d'outil dans la broche.") #message dans la console
             sys.exit(1)  #arrète le programe
-    elif input_number == check_clamp_status:
+    elif input_number == check_clamp_status:  #2eme verification d'entrée
         mod_IP = d.getModule(ModuleType.IP, 0)
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset:
             print("La pince est fermé")
@@ -95,8 +98,9 @@ def Read_if_tool_in (input_number):
             
 #-----------------------------------------------------------
 # Fonction regarde si l'outil a bien été libéré, "délivré" sinon stop le programe
-# Read_if_tool_out (check_tool_in_spindel)
-# Read_if_tool_out (check_clamp_status)
+# Copier/Coller les 2 phrases si dessous a l'endroit souhaité dans le code
+# Read_if_tool_out (check_tool_in_spindel)      ----->pour ma fraise ce capteur doit etre OFF
+# Read_if_tool_out (check_clamp_status)         ----->pour ma fraise ce capteur doit etre ON
 #-----------------------------------------------------------
 
 
@@ -121,10 +125,11 @@ def Read_if_tool_out(input_number):
 
 
 #-----------------------------------------------------------
-# Fonction pour Activer n'importe quelle sorties numériques spécifiée, exemple:
+# Fonction pour Activer n'importe quelle sorties numériques spécifiée.
+# Copier/Coller une des phrases si dessous a l'endroit souhaité dans le code
 # allumé =   set_digital_output(valve_collet, DIOPinVal.PinSet)   
 # eteinte =  set_digital_output(valve_collet, DIOPinVal.PinReset)
-# remplacer 'valve_collet' pour géré d'autres sortie, voir au debut script)
+# remplacer 'valve_collet' dans les phrase si dessus pour géré d'autres sortie, voir au debut script)
 #-----------------------------------------------------------
 
 def set_digital_output(output_number, value):

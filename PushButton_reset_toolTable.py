@@ -33,15 +33,15 @@ root = tk.Tk()
 root.title("Reset Tool Length")
 message = "Are you sure you want to reset all tool lengths?"
 label = tk.Label(root, text=message)
-label.pack(pady=10)
+label.pack(pady=20)
 
 button_frame = tk.Frame(root)
 button_frame.pack()
 
 ok_button = tk.Button(button_frame, text="Reset All", command=reset_tool_length)
-ok_button.pack(side=tk.LEFT, padx=5)
+ok_button.pack(side=tk.LEFT, padx=10)
 
 cancel_button = tk.Button(button_frame, text="Cancel", command=cancel_reset)
-cancel_button.pack(side=tk.LEFT, padx=5)
+cancel_button.pack(side=tk.LEFT, padx=10)
 
 root.mainloop()
