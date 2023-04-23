@@ -2,7 +2,7 @@
 # Test your digital outputs without getting tired
 
 #######################################################################
-# Définissez le numéro de sortie numérique ici None = pas configuré
+# Définissez le numéro de sortie numérique ici . None = pas configuré
 valve_collet = 13           # cone porte outils
 valve_dust_colector = None  # déplacement du récupérateur de poussières
 valve_clean_cone = 15       # Nettoyage du cone

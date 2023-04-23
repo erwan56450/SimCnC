@@ -1,20 +1,20 @@
 # Copier/Coller ce code Dans SimCNC> macroEditor> file> open> M6.py 
 # Copy/past in SimCNC> macroEditor> file> open> M6.py
 
-# Le fichier Configmachine.py doit etre placer dans le meme répèrtoir que celui ci M6.py
+# Le fichier Configmachine.py doit etre placer dans le meme répèrtoir que ce fichier M6.py
 
 
 
 
-X = 0                               # donne a noms a l'axe quand getposition est utilisé
-Y = 1                               
-Z = 2                                
+X = 0  # donne un noms a l'axe quand getposition est utilisé
+Y = 1  # Plus loint dans le code j'apelle get posision qui me renvoie une posision machine qui si la machine est a zero sera: 0.0.0.0.0.0                             
+Z = 2  # ses lignes servent a nommer c'est chifres, le premier zero qui est en position 0 est nomé X le 2eme qui est en position 1 est nomé Y ex..                              
 A = 3                               
 B = 4
 C = 5
 
-import time                         # importe le temps pour la fonction time.sleep (import time for the function time.sleep)
-import sys                          # pour utiliser la fonction sys.exit() (to use the sys.exit() function)
+import time   # importe le temps pour la fonction time.sleep (import time for the function time.sleep)
+import sys    # pour utiliser la fonction sys.exit() (to use the sys.exit() function)
 
 try:
     import ConfigMachine # Import les variable/infos du fichier ConfigMachine.py 
@@ -26,9 +26,9 @@ except ImportError:
 # Importe le tradution du fichier multilingual.py a placer dans le meme répèretoir que M6
 #-----------------------------------------------------------
 try:
-    from ATC_X_table.multilingual import _
+    from multilingual import _
 except ModuleNotFoundError:
-    print("The multilingual.py file cannot be found. Translations will not be available.")
+    print("The multilingual.py file cannot be found. Traduction pas disponible.")
     
     def _(text):
         return text
@@ -38,7 +38,8 @@ except ModuleNotFoundError:
 
 #-----------------------------------------------------------
 # Fonction regarde si un outil est en place , sinon stop le programe
-# Prévu pour contact NO, Inverser PinSet<>PinReset pour les contacts NC
+# C'est contacts sont prévue pour ma fraise et probablement pas la votre
+# Insérer ses 2 lignes dans le code a partir de "debut du script" pour lancer cette fonction
 # Read_if_tool_in (check_tool_in_spindel)
 # Read_if_tool_in (check_clamp_status)
 #-----------------------------------------------------------
@@ -65,7 +66,8 @@ def Read_if_tool_in (input_number):
             
 #-----------------------------------------------------------
 # Fonction regarde si l'outil a bien été libéré, "délivré" sinon stop le programe, 
-# Prévu pour contact NO, Inverser PinSet<>PinReset pour les contacts NC
+# C'est contacts sont prévue pour ma fraise et probablement pas la votre
+# Insérer ses 2 lignes dans le code a partir de "debut du script" pour lancer cette fonction
 # Read_if_tool_out (check_tool_in_spindel)
 # Read_if_tool_out (check_clamp_status)
 #-----------------------------------------------------------
@@ -105,7 +107,7 @@ def set_digital_output(output_number, value):
         mod_IP = d.getModule(ModuleType.IP, 0) # pour cismo ipS
         mod_IP.setDigitalIO(output_number, value)
     except NameError:
-        print("The digital output has not been well defined.")
+        print(_("The digital output has not been well defined."))
 
 
 
@@ -131,17 +133,15 @@ y_coord = position[Y]  # Récupérer la coordonnée Y et la nome y_coord (Retrie
 if hold_tool != new_tool: #si new_tool = hold_tool annule le changement d'outil (If new_tool equals hold_tool, cancel the tool change.)
 
     if 1 <= new_tool <= ToolCount:     #verifi si l'outil est compris entre 1 et tool count (Checks if the tool number is between 1 and tool count)
-        print(f"------------------\n Storing tool number {hold_tool}\n------------------")  # \n est un retour a la ligne
+        print(_(f"------------------\n Storing tool number {hold_tool}\n------------------"))  # \n est un retour a la ligne
     else:
-        error_message = "The tool called in the G-code does not exist"
-        print(error_message)
-        msg.info(error_message, "Oups")
+        msg.info(_("The tool called in the G-code does not exist", "Oups"))
         sys.exit(1)  # Arrête le programme
 
 
     # Calculer la position X en fonction du numéro d'outil
     X_position_hold_tool = X_position_first_tool + ((hold_tool - 1) * X_distance_between_tools)
-    print(f"------------------\n Old tool va être rangé à l'emplacement: {hold_tool}\n------------------")
+    print(_(f"------------------\n Old tool va être rangé à l'emplacement: {hold_tool}\n------------------"))
 
 
     # Récupérer la position de la machine et la nome "position" (Retrieve the machine's position and name it "position".)
@@ -215,11 +215,9 @@ if hold_tool != new_tool: #si new_tool = hold_tool annule le changement d'outil 
         # Si le numéro d'outil est plus grand que ToolCount, utiliser le modulo pour déterminer la position .Permet de configurer plus d'outils que d'emplacement disponible, emexple si toulcount=10  alors loutil 11 sera placer sur l'emplacement 1 ...
         #(If the tool number is greater than ToolCount, use modulo to determine the position. This allows you to configure more tools than available locations. For example, if ToolCount=10, then tool 11 will be placed on location 1...)
         new_tool = (new_tool - 1) % ToolCount + 1   
-        print(f"------------------\n Loading the new tool. {new_tool}\n------------------")
+        print(_(f"------------------\n Loading the new tool. {new_tool}\n------------------"))
     else:
-        error_message = "Tool number called too small or too large."
-        print(error_message)
-        msg.info(error_message, "Oups")
+        msg.info((_"Tool number called too small or too large.", "Oups"))
         sys.exit(1)  # Arrête le programme "Stop the program."
 
     # Calculer la position X en fonction du numéro d'outil (Calculate the X position based on the tool number)
@@ -269,13 +267,13 @@ if hold_tool != new_tool: #si new_tool = hold_tool annule le changement d'outil 
     position[Y] = Y_position_safe_zone
     d.moveToPosition(CoordMode.Machine, position, YX_speed)
 
-    print("-------------------\n End of tool change \n--------------------")
+    print(_("-------------------\n End of tool change \n--------------------"))
 
     #-----------------------------------------------------------
     #fin des mouvements de changement d'outils (End of tool change movements)
     #-----------------------------------------------------------
 else:
-    print(f"-------------------\n The tool {new_tool} is already in place \n--------------------")
+    print(_(f"-------------------\n The tool {new_tool} is already in place \n--------------------"))
 
 #-----------------------------------------------------------
 # Debut script de mesure ,basé sur l'original de simcnc (Beginning of the measurement script, based on the original from SimCNC)
@@ -287,7 +285,7 @@ if do_i_have_prob == True: #regarde au debut du code si oui ou non la mesure doi
    # Vérifit si la longueur de l'outil new_tool dans simCNC est 0 (non mesurée) si O execute le code de mesure
    # Verifying if the length of the new_tool in simCNC is 0 (not measured). If it is, execute the measurement code."
     if new_tool_length == 0  or  every_time_get_measure == True :  
-        print(f"Tool {new_tool} Launching the measurement process .")
+        print(_(f"Tool {new_tool} Launching the measurement process ."))
             
         # deplacement en XY safe zone , evite les colision avec les outils rangés
         position[X] = probeStartAbsPos['X_probe']
