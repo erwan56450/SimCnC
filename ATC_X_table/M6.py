@@ -252,9 +252,6 @@ if hold_tool != new_tool and hold_tool != 0: #si new_tool = hold_tool annule le 
     #-----------------------------------------------------------
     # Récupérer le numéro d'outil du g code M6 puis calcule sa position puis mouvements (Retrieve the tool number from the M6 g-code, calculate its position, and perform the corresponding movements)
     #-----------------------------------------------------------
-
-
-
 if hold_tool != new_tool:
 
     if  new_tool <= ToolCount:

@@ -183,13 +183,13 @@ set_digital_output(valve_dust_colector, DIOPinVal.PinSet)
 #mouvements
 #-----------------------------------------------------------
 
-if hold_tool != new_tool: #si new tool = hold tool alors n'oppère pas de changements
+if hold_tool != new_tool and hold_tool != 0:#si new tool = hold tool alors n'oppère pas de changements
 
     #-----------------------------------------------------------
     #Mouvement du tourniquet sur hold_tool
     #-----------------------------------------------------------
 
-    if 1 <= hold_tool <= Tool_Count: #vérifi que l'outil n'est pas zero ou plus que tool_count
+    if hold_tool <= Tool_Count: #vérifi que l'outil n'est pas plus grand que tool_count
         hold_tool_position_C = ((C_position_last_tool - C_position_first_tool) / (Tool_Count - 1) * (hold_tool-1)) + C_position_first_tool #calcul de l'écatement etre chaques rangement.
         print(f"hold tool va etre ranger a la posistion : {hold_tool}")
     else:
@@ -225,32 +225,50 @@ if hold_tool != new_tool: #si new tool = hold tool alors n'oppère pas de change
     if remaining_time > 0: 
         time.sleep(remaining_time)
 
-    # Déplacer l'axe Z devant la pince
+    # Decend Z a hauteur des outils
     position[Z] = Z_position_tools
     d.moveToPosition(CoordMode.Machine, position, Z_speed_down)
 
-    # déplacement Y  dans la pince
+if hold_tool = 0 #si hold_tool = 0 c'est ici que commence les mouvements 
+
+    # Déplacer l'axe Z en haut si hold_tool = 0  Autres = inogré
+    position[Z] = 0
+    d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
+
+if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool
+
+    # déplacement Y  dans la pince Ou au dessus si Hold_tool = 0
     position[Y] = Y_tool_clamp
     d.moveToPosition(CoordMode.Machine, position, Y_speed_final) 
 
-    # Libert l'outil (release the tool)
+    # Libert l'outil OU ouvre la pince pour le senariot outil Zero(release the tool)
     set_digital_output(valve_collet, DIOPinVal.PinSet)
 
     # Pause pour l'ouverture de la pince
     time.sleep (0.5)
 
-    # Déplacer l'axe Z en haut
+    # Remonte Z a zero, mais ne bougera pas si Hold_tool = 0
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
 
-    Read_if_tool_out (check_tool_in_spindel)     
+    #Petit démarage de broche (pour un capteur capritieux sur notre broche)
+    d.executeGCode( "M3 S5000" )
+    time.sleep(1)
+    d.setSpindleState( SpindleState.OFF )
+    time.sleep(0.5)
+    
+    #verifi qu'il n'y a pas ou plus d'outils dans la broche
+    Read_if_tool_out (check_tool_in_spindel)  
+    #vérifit que la pince est ouverte
     Read_if_tool_out (check_clamp_status)
 
     #-----------------------------------------------------------
     #Mouvement du tourniquet sur new_tool
     #-----------------------------------------------------------
 
-    if 1 <= new_tool <= Tool_Count: #vérifi que l'outil n'est pas zero ou plus que tool_count
+    
+
+    if new_tool <= Tool_Count: #vérifi que new_tool n'est pas plus grand que tool_count
         New_tool_position_C = ((C_position_last_tool - C_position_first_tool) / (Tool_Count - 1) * (new_tool - 1)) + C_position_first_tool #calcul de l'écatement etre chaques rangement.
         print(f"récupération de l'outil : {new_tool}")
     else:
@@ -290,6 +308,12 @@ if hold_tool != new_tool: #si new tool = hold tool alors n'oppère pas de change
     # Déplacer l'axe Z en zero
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
+
+    #Petit démarage de broche (pour un capteur capritieux sur notre broche)
+    d.executeGCode( "M3 S5000" )
+    time.sleep(1)
+    d.setSpindleState( SpindleState.OFF )
+    time.sleep(0.5)
 
     Read_if_tool_in (check_tool_in_spindel)
     Read_if_tool_in (check_clamp_status)
@@ -378,8 +402,7 @@ else:
     print("-------------------\n Mesure d'outil annulée, pas de palpeur instalé\n--------------------") 
 
 
-# active les soft limite
-d.ignoreAllSoftLimits(False)
+
 
 # Export les infos du nouvel outil dans simcnc    
 d.setToolLength (new_tool,new_tool_length)
@@ -389,6 +412,9 @@ d.setSpindleToolNumber(new_tool)
 # dégagement du tourniquet ou du palpeur a la position X enregistré au debut du script
 position[Y] = Y_coord
 d.moveToPosition(CoordMode.Machine, position, Y_speed)
+
+# active les soft limite
+d.ignoreAllSoftLimits(False)
 
 # stop la valve pour le cache poussière
 set_digital_output(valve_dust_colector, DIOPinVal.PinReset)
