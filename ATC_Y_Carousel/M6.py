@@ -183,8 +183,7 @@ set_digital_output(valve_dust_colector, DIOPinVal.PinSet)
 #mouvements
 #-----------------------------------------------------------
 
-if hold_tool != new_tool and hold_tool != 0:#si new tool = hold tool alors n'oppère pas de changements
-
+if hold_tool != new_tool and hold_tool != 0:#Si hold_tool n'est pas égale a new_tool ou zero execute les ligne suivantes
     #-----------------------------------------------------------
     #Mouvement du tourniquet sur hold_tool
     #-----------------------------------------------------------
@@ -231,7 +230,7 @@ if hold_tool != new_tool and hold_tool != 0:#si new tool = hold tool alors n'opp
 
 if hold_tool = 0 #si hold_tool = 0 c'est ici que commence les mouvements 
 
-    # Déplacer l'axe Z en haut si hold_tool = 0  Autres = inogré
+    # Déplacer l'axe Z en haut seulement si hold_tool = 0  
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
 
@@ -241,15 +240,26 @@ if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool
     position[Y] = Y_tool_clamp
     d.moveToPosition(CoordMode.Machine, position, Y_speed_final) 
 
+if hold_tool != new_tool and hold_tool != 0 #Si hold_tool n'est pas égale a new_tool ou zero execute les ligne suivantes
+
     # Libert l'outil OU ouvre la pince pour le senariot outil Zero(release the tool)
     set_digital_output(valve_collet, DIOPinVal.PinSet)
 
     # Pause pour l'ouverture de la pince
     time.sleep (0.5)
 
-    # Remonte Z a zero, mais ne bougera pas si Hold_tool = 0
+    #vérifit que la pince est ouverte
+    Read_if_tool_out (check_clamp_status)
+
+    # Remonte Z a zero
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
+
+if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool
+
+    # referme la pince
+    set_digital_output(valve_collet, DIOPinVal.PinReset)
+    time.sleep (0.5)
 
     #Petit démarage de broche (pour un capteur capritieux sur notre broche)
     d.executeGCode( "M3 S5000" )
@@ -259,8 +269,7 @@ if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool
     
     #verifi qu'il n'y a pas ou plus d'outils dans la broche
     Read_if_tool_out (check_tool_in_spindel)  
-    #vérifit que la pince est ouverte
-    Read_if_tool_out (check_clamp_status)
+
 
     #-----------------------------------------------------------
     #Mouvement du tourniquet sur new_tool
@@ -283,6 +292,9 @@ if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool
     #-----------------------------------------------------------
     #mouvement pour aller chercher new tool 
     #-----------------------------------------------------------
+    
+    # ouvre la pince
+    set_digital_output(valve_collet, DIOPinVal.PinSet)
 
     # descend  Z  pour un nettoyage
     position[Z] = Z_position_clean
@@ -315,7 +327,9 @@ if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool
     d.setSpindleState( SpindleState.OFF )
     time.sleep(0.5)
 
+    #Verifit si outil dans la broche
     Read_if_tool_in (check_tool_in_spindel)
+    #Verifit si la pince est fermé
     Read_if_tool_in (check_clamp_status)
 
     #imprime dans la console
