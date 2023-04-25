@@ -176,6 +176,11 @@ start_time_stop_spin = time.time() #lance un chronometre (starts a timer)
 # releve le colecteur de poussière si l'entré est définit
 set_digital_output(valve_dust_colector, DIOPinVal.PinSet)
 
+# ouvre la porte du tourniquet
+set_digital_output(valve_dor, DIOPinVal.PinSet)
+
+#supprimer les soft limite
+d.ignoreAllSoftLimits(True)
 
 #-----------------------------------------------------------
 #mouvements
@@ -198,9 +203,6 @@ if hold_tool != new_tool and hold_tool != 0:#Si hold_tool n'est pas égale a new
     position[C] = hold_tool_position_C
     d.moveToPosition(CoordMode.Machine, position, C_speed)
 
-    # ouvre la porte du tourniquet
-    set_digital_output(valve_dor, DIOPinVal.PinSet)
-
     #-----------------------------------------------------------
     #debut des mouvements portique
     #-----------------------------------------------------------
@@ -208,9 +210,6 @@ if hold_tool != new_tool and hold_tool != 0:#Si hold_tool n'est pas égale a new
     # Déplacer l'axe Z en haut
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
-
-    #supprimer les soft limite
-    d.ignoreAllSoftLimits(True)
 
     # déplacement Y avant le tourniquet
     position[Y] = Y_approch
@@ -240,7 +239,7 @@ if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool
 
 if hold_tool != new_tool and hold_tool != 0 #Si hold_tool n'est pas égale a new_tool ou zero execute les ligne suivantes
 
-    # Libert l'outil OU ouvre la pince pour le senariot outil Zero(release the tool)
+    # Libert l'outil OU ouvre la pince si outil Zero
     set_digital_output(valve_collet, DIOPinVal.PinSet)
 
     # Pause pour l'ouverture de la pince
@@ -253,11 +252,11 @@ if hold_tool != new_tool and hold_tool != 0 #Si hold_tool n'est pas égale a new
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
 
-if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool
-
     # referme la pince
     set_digital_output(valve_collet, DIOPinVal.PinReset)
     time.sleep (0.5)
+
+if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool
 
     #Petit démarage de broche (pour un capteur capritieux sur notre broche)
     d.executeGCode( "M3 S5000" )
