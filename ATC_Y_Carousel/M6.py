@@ -71,12 +71,6 @@ C = 5
 import time                         # importe le temps pour la fonction time.sleep (import time for the function time.sleep)
 import sys                          # pour utiliser la fonction sys.exit() (to use the sys.exit() function)
 
-try:
-    import ConfigMachine # Import les variable/infos du fichier ConfigMachine.py 
-except ImportError:
-    msg.info("File ConfigMachine.py not found. !")
-    sys.exit(1) 
-
 #-----------------------------------------------------------
 # Fonction regarde si un outil est en place , sinon stop le programe
 # Copier/Coller les 2 phrases si dessous a l'endroit souhaité dans le code a partir de #Debut de la macro
@@ -186,7 +180,7 @@ d.ignoreAllSoftLimits(True)
 #mouvements
 #-----------------------------------------------------------
 
-if hold_tool != new_tool and hold_tool != 0:#Si hold_tool n'est pas égale a new_tool ou zero execute les ligne suivantes
+if hold_tool != new_tool and hold_tool != 0: #Si hold_tool n'est pas égale a new_tool ni zero execute les ligne suivantes
     #-----------------------------------------------------------
     #Mouvement du tourniquet sur hold_tool
     #-----------------------------------------------------------
@@ -225,19 +219,19 @@ if hold_tool != new_tool and hold_tool != 0:#Si hold_tool n'est pas égale a new
     position[Z] = Z_position_tools
     d.moveToPosition(CoordMode.Machine, position, Z_speed_down)
 
-if hold_tool = 0 #si hold_tool = 0 c'est ici que commence les mouvements 
-
+if hold_tool == 0:  #si hold_tool = 0, execute les lignes suivante
+    
     # Déplacer l'axe Z en haut seulement si hold_tool = 0  
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
 
-if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool
+if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool  execute les lignes suivante
 
     # déplacement Y  dans la pince Ou au dessus si Hold_tool = 0
     position[Y] = Y_tool_clamp
     d.moveToPosition(CoordMode.Machine, position, Y_speed_final) 
 
-if hold_tool != new_tool and hold_tool != 0 #Si hold_tool n'est pas égale a new_tool ou zero execute les ligne suivantes
+if hold_tool != new_tool and hold_tool != 0: #Si hold_tool n'est pas égale a new_tool ou zero execute les lignes suivantes
 
     # Libert l'outil OU ouvre la pince si outil Zero
     set_digital_output(valve_collet, DIOPinVal.PinSet)
@@ -256,7 +250,7 @@ if hold_tool != new_tool and hold_tool != 0 #Si hold_tool n'est pas égale a new
     set_digital_output(valve_collet, DIOPinVal.PinReset)
     time.sleep (0.5)
 
-if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool
+if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool execute les lignes suivante
 
     #Petit démarage de broche (pour un capteur capritieux sur notre broche)
     d.executeGCode( "M3 S5000" )
