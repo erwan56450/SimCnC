@@ -43,6 +43,7 @@ blowing_time = 0.5                  # temps en seconde du coup de soufflette a l
 
 #-----------------------------------------------------------
 # Infos sur le Contacteur de palpage (probing infos)
+# attention: metre les meme Unité dans votre fichier probing.py
 #-----------------------------------------------------------
 
 do_i_have_prob = True        # True = mesure d'outil activée. False = mesure d'outil desactivée
@@ -144,6 +145,12 @@ def set_digital_output(output_number, value):
         print("la sortie numerique na pas été bien definit")
 
 
+############################################################
+#Debut de la macro (Macro START)
+############################################################
+
+#-----------------------------------------------------------
+# Intéroge le Csmio , et nome les valeurs en retour avec des noms
 #--------------------------------------------------------------
 #recupère le numero d'outil sur la broche et le nome hold tool
 hold_tool = d.getSpindleToolNumber()  
@@ -156,10 +163,24 @@ position = d.getPosition(CoordMode.Machine)
 # Récupérer la coordonnée Y et la sauvegarde sous le noms de Y_coord pour qu'a la fin du script Y retourne a cette endroit
 Y_coord = position[Y] 
 
-############################################################
-#Debut de la macro (Macro START)
-############################################################
+#-----------------------------------------------------------
+#regarde si il y a un outil dans la broche, Si "non" nome l'outil Zero.
+#-----------------------------------------------------------
 
+#Petit démarage de broche (pour un capteur capritieux )
+# Déplacer l'axe Z en haut
+position[Z] = 0
+d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
+#Petit démarage de broche (pour un capteur capritieux )
+d.executeGCode( "M3 S5000" )
+time.sleep(1)
+d.setSpindleState( SpindleState.OFF )
+time.sleep(0.5)
+
+mod_IP = d.getModule(ModuleType.IP, 0)
+if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.PinReset:
+    d.setSpindleToolNumber("0")
+    print(_("------------------\nPas d'outil detecté dans la fraise.\n------------------"))
 #-----------------------------------------------------------
 # Stop spindel
 #-----------------------------------------------------------
@@ -236,6 +257,9 @@ if hold_tool != new_tool and hold_tool != 0: #Si hold_tool n'est pas égale a ne
     # Libert l'outil OU ouvre la pince si outil Zero
     set_digital_output(valve_collet, DIOPinVal.PinSet)
 
+    # indique a simcnc que le nouvelle outil Zero est en place
+    d.setSpindleToolNumber('0')
+
     # Pause pour l'ouverture de la pince
     time.sleep (0.5)
 
@@ -303,6 +327,12 @@ if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool execute les
 
     # Ferme la pince de la broche
     set_digital_output(valve_collet, DIOPinVal.PinReset)
+
+    # indique a simcnc que le nouvelle outil est en place
+    d.setToolOffsetNumber(new_tool)
+    d.setToolLength (new_tool,new_tool_length)
+    d.setToolOffsetNumber(new_tool)
+
 
     # Y sort de la pince du tourniquet
     position[Y] = Y_approch

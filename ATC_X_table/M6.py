@@ -96,16 +96,16 @@ def Read_if_tool_in (input_number):
     elif input_number == check_tool_in_spindel:
         mod_IP = d.getModule(ModuleType.IP, 0) # apelle le csmio ip-s
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet: #pinset =allumé
-            print(_("A tool has been detected in the spindle."))
+            print(_("------------------\nA tool has been detected in the spindle."))
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset: #pinreset = etaind
-            print(_("There is no tool in the spindle.."))
+            print(_("------------------\nThere is no tool in the spindle.."))
             sys.exit(1)  #arrète le programe
     elif input_number == check_clamp_status:
         mod_IP = d.getModule(ModuleType.IP, 0)
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset:
-            print(_("The clamp is closed."))
+            print(_("------------------\nThe clamp is closed."))
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet:
-            print(_("The clamp is open."))
+            print(_("------------------\nThe clamp is open."))
             sys.exit(1)   #arrète le programe
             
 
@@ -125,17 +125,17 @@ def Read_if_tool_out(input_number):
     elif input_number == check_tool_in_spindel:
         mod_IP = d.getModule(ModuleType.IP, 0)
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet:
-            print(_("The tool remains in the spindle."))
+            print(_("------------------\nThe tool remains in the spindle."))
             sys.exit(1)  #arrète le programe
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset:
-            print(_("There is no tool in the spindle."))
+            print(_("------------------\nThere is no tool in the spindle."))
     elif input_number == check_clamp_status:
         mod_IP = d.getModule(ModuleType.IP, 0)
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset:
-            print(_("The clamp remained closed."))
+            print(_("------------------\nThe clamp remained closed."))
             sys.exit(1) #arrète le programe
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet:
-            print(_("The clamp is open.."))
+            print(_("------------------\nThe clamp is open.."))
 
 
 
@@ -153,7 +153,7 @@ def set_digital_output(output_number, value):
         mod_IP = d.getModule(ModuleType.IP, 0) # pour cismo ipS
         mod_IP.setDigitalIO(output_number, value)
     except NameError:
-        print(_("The digital output has not been well defined."))
+        print(_("------------------\nThe digital output has not been well defined."))
 
 
 
@@ -162,9 +162,16 @@ def set_digital_output(output_number, value):
 ############################################################
 
 #-----------------------------------------------------------
-# Récupérer le numéro de l'outil dans la broche puis le raporte a ca place
-# Get the tool number in the spindle and then return it to its place.
+#regarde si il y a un outil dans la broche, Si "non" nome l'outil en place dans Simcnc "Zero".
 #-----------------------------------------------------------
+
+mod_IP = d.getModule(ModuleType.IP, 0)
+if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.PinReset:
+    d.setSpindleToolNumber("0")
+    print(_("------------------\nNO TOOL IN SPINDEL.\n------------------"))
+#-----------------------------------------------------------
+# Intéroge le Csmio , et nome les valeurs en retour avec des noms
+#--------------------------------------------------------------
 
 #recupère le numero d'outil sur la broche et le nome hold tool (Get the tool number on the spindle and name it "hold_tool".)
 hold_tool = d.getSpindleToolNumber()  
@@ -176,12 +183,17 @@ new_tool_length = d.getToolLength(new_tool)
 position = d.getPosition(CoordMode.Machine)
 y_coord = position[Y]  # Récupérer la coordonnée Y et la nome y_coord (Retrieve the Y coordinate and name it y_coord.)
 
+#-----------------------------------------------------------
+# Récupérer le numéro de l'outil dans la broche puis le raporte a ca place
+# Get the tool number in the spindle and then return it to its place.
+#-----------------------------------------------------------
+
 if hold_tool != new_tool and hold_tool != 0: #si new_tool = hold_tool annule le changement d'outil (If new_tool equals hold_tool, cancel the tool change.)
 
     if  new_tool <= ToolCount:     #verifi si l'outil est compris entre 1 et tool count (Checks if the tool number is between 1 and tool count)
         print(_(f"------------------\n Storing tool number {hold_tool}\n------------------"))  # \n est un retour a la ligne
     else:
-        msg.info(_("The tool called in the G-code does not exist", "Oups"))
+        msg.info(_("------------------\nThe tool called in the G-code does not exist", "Oups"))
         sys.exit(1)  # Arrête le programme
 
 
@@ -266,6 +278,9 @@ if hold_tool != new_tool:
     # Libert l'outil ou ouvre la pince si il n'y avait pas d'outil (release the tool)
     set_digital_output(valve_collet, DIOPinVal.PinSet)
 
+    # indique a simcnc que plus d'outil en place avec l'outil Zero.
+    d.setToolOffsetNumber(0)
+
     # Pause pour l'ouverture de la pince
     time.sleep (0.5)
 
@@ -279,8 +294,6 @@ if hold_tool != new_tool:
     # remonte Le Z a zero "Raise Z to zero."
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_up_speed)
-
-    print("???????????????????????????????")
 
     #verifie qu'un outil a bien été libéré (Verify that a tool has been properly released)
     Read_if_tool_out (check_tool_in_spindel)
@@ -309,6 +322,11 @@ if hold_tool != new_tool:
 
     # verouille l'outil(Lock the tool)
     set_digital_output(valve_collet, DIOPinVal.PinReset)
+
+    # indique a simcnc que le nouvelle outil est en place
+    d.setToolLength (new_tool,new_tool_length)
+    d.setToolOffsetNumber(new_tool)
+    d.setSpindleToolNumber(new_tool)
 
     # remonte Le Z a zero apres la prise d'outil (raise the Z to zero after tool pickup.)
     position[Z] = 0
