@@ -1,12 +1,17 @@
-from ConfigMachine import
+# Disclaimer: The provided code is open-source and free to use, modify, and distribute. 
+# The author shall not be held responsible for any injury, damage, or loss resulting from the use of this code.
+# By using this code, you agree to assume all responsibility and risk associated with the use of the code.
 
-X = 0  # donne un noms a l'axe quand getposition est utilisé
-Y = 1  # Plus loint dans le code j'apelle get posision qui renvoie une posision machine qui si la machine est a zero sera: 0.0.0.0.0.0                             
-Z = 2  # ses lignes servent a nommer c'est chifres, le premier zero qui est en position 0 est nomé X le 2eme qui est en position 1 est nomé Y ex..                              
-A = 3  # si votre chargeur d'outils est sur Y et non X comme moi, alors vous pouvez soit remplacer tous les X de ce code en Y, soit ici nomer X=1 Y=0
-B = 4
-C = 5
+# Code python pour changer d'outil sur fraise ATC automatiqueement et le mesurer si sa valeur dans la table d'outils est = 0
+# (Python code to automatically change the tool on an ATC router and measure it if its value in the tool table is = 0 )
 
+# Change tool script for SIMCNC & Csmio-s 
+# Erwan Le Foll 23/04/2022    https://youtube.com/@erwan3953
+
+# Le Homming de ce code ce fait en haut a droit de votre table au valeur home=Y0,X0,Z0. La zone de travail est donc en valeurs negatives.(peux ce modifier)
+# (The homing in this code is done in the top right of your table with home values = Y0, X0, Z0. The working area is therefore in negative values. (can be modified)
+
+from ConfigMachine import * #Import le fichier ConfigMachine.py qui doit ce trouver dans le meme répertoir que m6.py (#Import the ConfigMachine.py file which must be in the same directory as m6.py)
 import time   # importe le temps pour la fonction time.sleep (import time for the function time.sleep)
 import sys    # pour utiliser la fonction sys.exit() (to use the sys.exit() function)
 

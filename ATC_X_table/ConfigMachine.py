@@ -1,6 +1,3 @@
-# from ConfigMachine import
-
-
 # Disclaimer: The provided code is open-source and free to use, modify, and distribute. 
 # The author shall not be held responsible for any injury, damage, or loss resulting from the use of this code.
 # By using this code, you agree to assume all responsibility and risk associated with the use of the code.
@@ -60,3 +57,12 @@ checkFineProbingDiff = False        # Ne pas changer (Do not change)
 fineProbeMaxAllowedDiff = 0.1       # Tolerence entre les deux mesures (tolerance between the two measurements)
 moveX = True                        # Ne pas changer (Do not change)
 moveY = True                        # Ne pas changer (Do not change)
+
+
+
+X = 0  # donne un noms a l'axe quand getposition est utilisé
+Y = 1  # Plus loint dans le code j'apelle get posision qui renvoie une posision machine qui si la machine est a zero sera: 0.0.0.0.0.0                             
+Z = 2  # ses lignes servent a nommer c'est chifres, le premier zero qui est en position 0 est nomé X le 2eme qui est en position 1 est nomé Y ex..                              
+A = 3  # si votre chargeur d'outils est sur Y et non X comme moi, alors vous pouvez soit remplacer tous les X de ce code en Y, soit ici nomer X=1 Y=0
+B = 4
+C = 5
