@@ -162,12 +162,13 @@ new_tool_length = d.getToolLength(new_tool)
 position = d.getPosition(CoordMode.Machine)
 # Récupérer la coordonnée Y et la sauvegarde sous le noms de Y_coord pour qu'a la fin du script Y retourne a cette endroit
 Y_coord = position[Y] 
+#supprimer les soft limite
+d.ignoreAllSoftLimits(True)
 
 #-----------------------------------------------------------
 #regarde si il y a un outil dans la broche, Si "non" nome l'outil Zero.
 #-----------------------------------------------------------
 
-#Petit démarage de broche (pour un capteur capritieux )
 # Déplacer l'axe Z en haut
 position[Z] = 0
 d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
@@ -193,9 +194,6 @@ set_digital_output(valve_dust_colector, DIOPinVal.PinSet)
 
 # ouvre la porte du tourniquet
 set_digital_output(valve_dor, DIOPinVal.PinSet)
-
-#supprimer les soft limite
-d.ignoreAllSoftLimits(True)
 
 #-----------------------------------------------------------
 #mouvements
