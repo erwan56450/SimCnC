@@ -9,6 +9,7 @@ check_tool_in_spindel = 24 # Numero de l'entrée a vérifier si "off" avant le h
 
 import time
 
+# Sur cette machine la broche doit tourner quelques tour pour que le capteur fonctionne correcement 
 d.executeGCode( "M3 S5000" )
 time.sleep(1)
 d.setSpindleState( SpindleState.OFF )

@@ -58,11 +58,24 @@ fineProbeMaxAllowedDiff = 0.1       # Tolerence entre les deux mesures (toleranc
 moveX = True                        # Ne pas changer (Do not change)
 moveY = True                        # Ne pas changer (Do not change)
 
+#-----------------------------------------------------------
+#3d prob infos (infos si dessous utilisé par le fichier 3d_prob.py)
+#-----------------------------------------------------------
+
+threeD_prob = 1                     # numero de l'emplacement prob-3d, si PAS de prob3D indiquer "None" 
+threeD_probeIndex = 2               # corespond a l'entrée que vous avez configuré dans les settings de simcnc (0,1,2 ou 3 possible)
+wake_up_prob = True                 # fait tourner le prob pour l'allumer
+wake_up_speed = 500                 # vitesse de rotation du reveil
+wake_up_time = 0.5                  # Temps de totation du reveil
+threeD_fastProbeVel = 700           # vitesse de la premiere mesure, rapide (units/min) (Speed of the first, fast measurement (units/min))
+threeD_slowProbeVel = 250           # vitesse du deuxieme mesure, lente (units/min) (Speed of the second, slow measurement (units/min))
+threeD_retract = 5
+
 
 
 X = 0  # donne un noms a l'axe quand getposition est utilisé
-Y = 1  # Plus loint dans le code j'apelle get posision qui renvoie une posision machine qui si la machine est a zero sera: 0.0.0.0.0.0                             
-Z = 2  # ses lignes servent a nommer c'est chifres, le premier zero qui est en position 0 est nomé X le 2eme qui est en position 1 est nomé Y ex..                              
-A = 3  # si votre chargeur d'outils est sur Y et non X comme moi, alors vous pouvez soit remplacer tous les X de ce code en Y, soit ici nomer X=1 Y=0
+Y = 1  # "d.getPosition(CoordMode.Machine)"  renvoie une posision machine qui si la machine est a zero sera: 0.0.0.0.0.0                             
+Z = 2  # ses lignes de code servent a nommer chaque chiffre retrounés de la sorte X.Y.Z.A.B.C, le premier zero qui est en position 0 est nomé X le 2eme qui est en position 1 est nomé Y ex..                              
+A = 3  # si votre chargeur d'outils est sur Y et non X comme moi, alors vous pouvez soit remplacer tous les X dans le code m6.py par des Y, soit ici nomer X=1 Y=0 (astuce que je n'ai pas testé)
 B = 4
 C = 5

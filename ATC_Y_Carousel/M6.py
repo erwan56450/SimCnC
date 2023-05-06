@@ -29,6 +29,7 @@ def Read_if_tool_in (input_number):
             print("Un outil a été détecté dans la broche.") #message dans la console
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset: #pinreset = éteint
             print("Il n'y a pas d'outil dans la broche.") #message dans la console
+            msg.info ("Il n'y a pas d'outil dans la broche.")
             sys.exit(1)  #arrète le programe
     elif input_number == check_clamp_status:  #2eme verification d'entrée
         mod_IP = d.getModule(ModuleType.IP, 0)
@@ -36,6 +37,7 @@ def Read_if_tool_in (input_number):
             print("La pince est fermé")
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet:
             print("La pince est ouvert")
+            msg.info("La pince est ouvert")
             sys.exit(1)   #arrète le programe
             
 
@@ -55,6 +57,7 @@ def Read_if_tool_out(input_number):
         mod_IP = d.getModule(ModuleType.IP, 0)
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet:
             print("L'outil est reste dans la broche")
+            msg.info ("L'outil est reste dans la broche")
             sys.exit(1)  #arrète le programe
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset:
             print("il n'y a pas d'outil dans la broche")
@@ -62,6 +65,7 @@ def Read_if_tool_out(input_number):
         mod_IP = d.getModule(ModuleType.IP, 0)
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset:
             print("La pince est resté fermé")
+            msg.info ("La pince est resté fermé")
             sys.exit(1) #arrète le programe
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet:
             print("La pince est ouverte.")
@@ -83,7 +87,7 @@ def set_digital_output(output_number, value):
         mod_IP = d.getModule(ModuleType.IP, 0) # pour cismo ipS
         mod_IP.setDigitalIO(output_number, value)
     except NameError:
-        print("la sortie numerique na pas été bien definit")
+        msg.info("la sortie numerique na pas été bien definit")
 
 
 ############################################################
@@ -107,10 +111,10 @@ Y_coord = position[Y]
 d.ignoreAllSoftLimits(True)
 
 #-----------------------------------------------------------
-#regarde si il y a un outil dans la broche, Si "non" nome l'outil Zero.
+#regarde si il y a un outil dans la broche, Si "pas d'outil" indique outil Zero dans simcnc.
 #-----------------------------------------------------------
 
-# Déplacer l'axe Z en haut
+# Déplacer l'axe Z en position zero
 position[Z] = 0
 d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
 #Petit démarage de broche (pour un capteur capritieux )
@@ -121,8 +125,13 @@ time.sleep(0.5)
 
 mod_IP = d.getModule(ModuleType.IP, 0)
 if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.PinReset:
-    d.setSpindleToolNumber("0")
-    print(_("------------------\nPas d'outil detecté dans la fraise.\n------------------"))
+    d.setSpindleToolNumber("0") #nome l'outil 0 dans simcnc
+    print("------------------\nPas d'outil detecté dans la fraise.\n------------------")
+
+#recupère le numero d'outil sur la broche et le nome hold tool
+hold_tool = d.getSpindleToolNumber()
+
+
 #-----------------------------------------------------------
 # Stop spindel
 #-----------------------------------------------------------

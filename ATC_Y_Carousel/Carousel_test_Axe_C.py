@@ -1,3 +1,10 @@
+# Disclaimer: The provided code is open-source and free to use, modify, and distribute. 
+# The author shall not be held responsible for any injury, damage, or loss resulting from the use of this code.
+# By using this code, you agree to assume all responsibility and risk associated with the use of the code.
+
+# Change tool script for SIMCNC & Csmio-s 
+# Erwan Le Foll 24/04/2022      https://youtube.com/@erwan3953
+
 C_speed = 1000  #vitesse 
 C_position_first_tool = 44  #position de C quand la fraise est en place dans le tourniquet a la position outil 1
 C_position_last_tool = 355 #position de C quand la fraise est en place dans le tourniquet a la position du dernier outil

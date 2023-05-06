@@ -3,7 +3,7 @@
 # By using this code, you agree to assume all responsibility and risk associated with the use of the code.
 
 # Change tool script for SIMCNC & Csmio-s 
-# Erwan Le Foll 24/04/2022   version 0.6   https://youtube.com/@erwan3953
+# Erwan Le Foll 24/04/2022   version 1.1   https://youtube.com/@erwan3953
 
 # Script de changement d'outil automatique pour un chargeur d'outil avec TOURNIQUET
 # ici le moteur du tourniquet est sur l'axe C en degrés (ou Lineair mm.) pour les Axes en degré comfigurer> axes> C> RotaryType (1->360) permet de prendre le chemain le plus court
@@ -26,18 +26,18 @@ Y_approch = -230                    # position y de la broche avant de rentrer l
 Y_tool_clamp= -300                  # position y final de la broche dans un porte outil
 Z_position_clean = -120             # distance a la quel le z descent pour nettoyage du cone
 Z_position_tools = -158             # emplacement Z ou l'outil est libéré (location where the tool is released)
-C_position_first_tool = 40          # position de C quand la fraise est en place dans le tourniquet a la position 1
+C_position_first_tool = 40          # position de C quand la fraise est en place dans le tourniquet a la position 1 ,ne doit pas etre plus grand que last_tool
 C_position_last_tool = 355          # position de C quand la fraise est en place dans le tourniquet a la position du dernier outil
 
 # numeros d'entrée/sorties
 Tool_Count = 8                      # Nombre max. d'outils dans le port outils
-check_tool_in_spindel = 9       # Numéro de l'entrée numérique qui gère le détecteur d'outil inséré  None=desactivé (Digital input number managing the tool detection sensor)
-check_clamp_status =8        # Numéro de l'entrée numérique qui gère le détecteur d'ouverture de la griffe du conne None=desactivé (Digital input number managing the cone clamp open sensor)
-valve_collet = 5                   # Numéro de la sortie numérique qui gère la valve pour le changement d'outil (Digital output number managing the valve for tool change)
-valve_clean_cone = 14  # Numéro de la sortie numérique qui gère la valve pour le nettoyage du cone du porte outil (Digital output number managing the valve for tool holder cone cleaning)
-valve_blower = 12               # Numéro de la sortie numérique qui gère la valve de la soufflette None=desactivé (Digital output number managing the valve for the blower)
-valve_dor = 7                  # Numéro de la sortie numérique qui gère la valve d'ouverture porte du tourniquet None=desactivé
-valve_dust_colector = 15          # Numéro de la sortie numérique qui gère la valve du levage de récupérateur de poussières None=desactivé
+check_tool_in_spindel = 9           # Numéro de l'entrée numérique qui gère le détecteur d'outil inséré  None=desactivé (Digital input number managing the tool detection sensor)
+check_clamp_status =8               # Numéro de l'entrée numérique qui gère le détecteur d'ouverture de la griffe du conne None=desactivé (Digital input number managing the cone clamp open sensor)
+valve_collet = 5                    # Numéro de la sortie numérique qui gère la valve pour le changement d'outil (Digital output number managing the valve for tool change)
+valve_clean_cone = 14               # Numéro de la sortie numérique qui gère la valve pour le nettoyage du cone du porte outil (Digital output number managing the valve for tool holder cone cleaning)
+valve_blower = 12                   # Numéro de la sortie numérique qui gère la valve de la soufflette None=desactivé (Digital output number managing the valve for the blower)
+valve_dor = 7                       # Numéro de la sortie numérique qui gère la valve d'ouverture porte du tourniquet None=desactivé
+valve_dust_colector = 15            # Numéro de la sortie numérique qui gère la valve du levage de récupérateur de poussières None=desactivé
 blowing_time = 0.5                  # temps en seconde du coup de soufflette a la dépose d'un outil ou a la mesure (Time in seconds of the blower at the tool drop or measurement).
 
 #-----------------------------------------------------------
@@ -45,7 +45,7 @@ blowing_time = 0.5                  # temps en seconde du coup de soufflette a l
 # attention: metre les meme Unité dans votre fichier probing.py
 #-----------------------------------------------------------
 
-do_i_have_prob = True        # True = mesure d'outil activée. False = mesure d'outil desactivée
+do_i_have_prob = True               # True = mesure d'outil activée. False = mesure d'outil desactivée
 every_time_get_measure = True       # true = mesure a tous les coups, false = mesure que si la table d'outil est a zero (attention a chaques changements de fraise, c'est a vous de reset la table d'outil a Zero)
 probeStartAbsPos = {'Y_probe': -80, 'Z_probe': -80} # Coordonnées de placement au dessus du prob [Y_probe, Z_probe] votre outil le plus long doit passer avec ce Z! (Placement coordinates above the probe [Y_probe, Y_probe, Z_probe] Your longest tool must pass with this Z!)
 probeIndex = 0                      # corespond a l'entrée que vous avez configuré dans les settings de simcnc (0,1,2 ou 3 possible)
@@ -61,9 +61,11 @@ moveX = True                        # ne pas changer (Do not change)
 moveY = True                        # ne pas changer (Do not change)
 
 
+
+
 X = 0  # donne un noms a l'axe quand getposition est utilisé
-Y = 1  # Plus loint dans le code j'apelle get posision qui renvoie une posision machine qui si la machine est a zero sera: 0.0.0.0.0.0                             
-Z = 2  # ses lignes servent a nommer c'est chifres, le premier zero qui est en position 0 est nomé X le 2eme qui est en position 1 est nomé Y ex..                              
-A = 3  # si votre chargeur d'outils est sur Y et non X comme moi, alors vous pouvez soit remplacer tous les X de ce code en Y, soit ici nomer X=1 Y=0
+Y = 1  # "d.getPosition(CoordMode.Machine)"  renvoie une posision machine qui si la machine est a zero sera: 0.0.0.0.0.0                             
+Z = 2  # ses lignes de code servent a nommer chaque chiffre retrounés de la sorte X.Y.Z.A.B.C, le premier zero qui est en position 0 est nomé X le 2eme qui est en position 1 est nomé Y ex..                              
+A = 3  # si votre chargeur d'outils est sur X et non Y comme moi, alors vous pouvez soit remplacer tous les Y dans le code m6.py par des X, soit ici nomer X=1 Y=0 (astuce que je n'ai pas testé)
 B = 4
 C = 5
