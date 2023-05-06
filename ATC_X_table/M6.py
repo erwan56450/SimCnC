@@ -83,8 +83,8 @@ def Read_if_tool_out(input_number):
 
 #-----------------------------------------------------------
 # Fonction pour Activer n'importe quelle sorties numériques spécifiée exemple:
-# allumé=   set_digital_output(valve_collet, DIOPinVal.PinSet)   
-# eteinte=  set_digital_output(valve_collet, DIOPinVal.PinReset)
+# allumé=   set_digital_output(valve_dustColect_under, DIOPinVal.PinSet)   
+# eteinte=  set_digital_output(valve_dustColect_under, DIOPinVal.PinReset)
 # remplacer 'valve_collet' pour géré d'autres sortie, voir au debut script)
 #-----------------------------------------------------------
 
@@ -137,18 +137,22 @@ d.ignoreAllSoftLimits(True)
 # Empèche le g-code d'apeller de Prob3D
 #-----------------------------------------------------------
 
-if new_tool == threeD_prob
+if new_tool == threeD_prob:
     print("l'outil apellé dans le gcode ne peux pas etre le prob3D")
     msg.info ("l'outil apellé le gcode ne peux pas etre le prob3D" "g-code err")
-
 
 #-----------------------------------------------------------
 # Récupérer le numéro de l'outil dans la broche puis le raporte a ca place
 # Get the tool number in the spindle and then return it to its place.
 #-----------------------------------------------------------
 
+# evacue le récupérateur de poussières
+set_digital_output(valve_dustColect_out, DIOPinVal.PinSet)   
+time.sleep(2)
+set_digital_output(valve_dustColect_out, DIOPinVal.PinReset)
+
 #si new_tool = hold_tool ou si = zero , annule le changement d'outil (If new_tool equals hold_tool, cancel the tool change.)
-if hold_tool != new_tool or hold_tool != 0: 
+if hold_tool != new_tool and hold_tool != 0: 
 
     if  hold_tool <= ToolCount:     #verifi si l'outil est compris entre 1 et tool count (Checks if the tool number is between 1 and tool count)
         print(_(f"------------------\n Storing tool number {hold_tool}\n------------------"))  # \n est un retour a la ligne
@@ -390,6 +394,10 @@ else:
 #rentre dans la zone soft limite (come back in soft limit zone )
 position[Y] = Y_position_safe_zone
 d.moveToPosition(CoordMode.Machine, position, YX_speed)
+
+set_digital_output(valve_dustColect_under, DIOPinVal.PinSet)   
+time.sleep(2)
+set_digital_output(valve_dustColect_under, DIOPinVal.PinReset)
 
 #active les soft limite
 d.ignoreAllSoftLimits(False)

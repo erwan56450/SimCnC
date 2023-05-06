@@ -34,7 +34,9 @@ ToolCount = 11                      # Nombre max. d'outils sur la table premier 
 check_tool_in_spindel = 24          # Numéro de l'entrée numérique qui gère le détecteur d'outil inséré, None=desactivé (Digital input number managing the tool detection sensor)
 check_clamp_status = 25             # Numéro de l'entrée numérique qui gère le détecteur d'ouverture de la griffe du conne , None=desactivé (Digital input number managing the cone clamp open sensor)
 valve_collet = 13                   # Numéro de la sortie numérique qui gère la valve pour le changement d'outil (Digital output number managing the valve for tool change)
-valve_clean_cone = 15               # Numéro de la sortie numérique qui gère la valve pour le nettoyage du cone du porte outil (Digital output number managing the valve for tool holder cone cleaning)
+valve_clean_cone = 14               # Numéro de la sortie numérique qui gère la valve pour le nettoyage du cone du porte outil (Digital output number managing the valve for tool holder cone cleaning)
+valve_dustColect_out = 9
+valve_dustColect_under = 11
 valve_blower = 12                   # Numéro de la sortie numérique qui gère la valve de la soufflette (Digital output number managing the valve for the blower)
 blowing_time = 0.5                  # temps en seconde du coup de soufflette a la dépose d'un outil ou a la mesure (Time in seconds of the blower at the tool drop or measurement).
 time_spindle_stop = 8               # temps en seconde  de l'arrete de votre broche avec l'outil le plus lourd (time in seconds for the stop of your spindel with the heaviest tool)
@@ -62,7 +64,7 @@ moveY = True                        # Ne pas changer (Do not change)
 #3d prob infos (infos si dessous utilisé par le fichier 3d_prob.py)
 #-----------------------------------------------------------
 
-threeD_prob = 1                     # numero de l'emplacement prob-3d, si PAS de prob3D indiquer "None" 
+threeD_prob = None                    # numero de l'emplacement prob-3d, si PAS de prob3D indiquer "None" 
 threeD_probeIndex = 2               # corespond a l'entrée que vous avez configuré dans les settings de simcnc (0,1,2 ou 3 possible)
 wake_up_prob = True                 # fait tourner le prob pour l'allumer
 wake_up_speed = 500                 # vitesse de rotation du reveil
