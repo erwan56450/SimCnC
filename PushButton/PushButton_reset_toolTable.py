@@ -1,4 +1,4 @@
-# Save the code here C:\Program Files\simCNC\screens\default\scripts\resetbutton.py
+# see how to add this to simcnc here https://youtu.be/OfvQqaUnNeQ
 
 # Code to link to a new button in SimCNC to reset tool compensation from 1 to 100
 # Used if you are using one of my ATC codes with the "every_time_get_measure = false" option
