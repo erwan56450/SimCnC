@@ -1,6 +1,9 @@
+
+# set the corect output number here
 OutputToControl = 0
-#3 table aspirante
-#0 aspiration
+
+#link this script to a push button in simcnc
+
 
 import sys
 
