@@ -6,7 +6,7 @@
 # Erwan Le Foll 24/04/2022   version 1.1   https://youtube.com/@erwan3953
 
 # Script de changement d'outil automatique pour un chargeur d'outil avec TOURNIQUET
-# ici le moteur du tourniquet est sur l'axe C en degrés (ou Lineair mm.) pour les Axes en degré comfigurer> axes> C> RotaryType (1->360) permet de prendre le chemain le plus court
+# ici le moteur du tourniquet est sur l'axe C en degrés (ou Lineair mm.) pour les Axes en degré (simcnc>comfigurer>axes>C>RotaryType>(1->360)) permet de prendre le chemain le plus court
 
 
 #-----------------------------------------------------------
@@ -14,9 +14,9 @@
 #-----------------------------------------------------------
 
 # vitesse (speed)
-Z_speed_down = 7000                 # vitesse Z en décente 
+Z_speed_down = 7000               # vitesse Z en décente 
 Z_speed_up = 5000                 # viteese de lever du Z (speed to lift Z)
-Y_speed = 20000                   # Vitesse  y (speed of 
+Y_speed = 20000                   # Vitesse  y (speed of Y
 Y_speed_final = 2000              # Vitesse  y d'aproche finale pour ranger l'outil
 C_speed = 2000                    # vitesse de C "porte outils"
 

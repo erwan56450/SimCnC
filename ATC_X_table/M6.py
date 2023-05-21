@@ -16,6 +16,7 @@ import time   # importe le temps pour la fonction time.sleep (import time for th
 import sys    # pour utiliser la fonction sys.exit() (to use the sys.exit() function)
 
 #-----------------------------------------------------------
+# WORK IN PROGRESS
 # Importe le tradution du fichier multilingual.py a placer dans le meme répèretoir que M6
 #-----------------------------------------------------------
 try:
@@ -28,6 +29,9 @@ except ModuleNotFoundError:
 #-----------------------------------------------------------
 # Fonction regarde si un outil est en place , sinon stop le programe
 # Copier/Coller les 2 phrases si dessous a l'endroit souhaité dans le code a partir de #Debut de la macro
+# Function checks if a tool is in place, otherwise stops the program
+# Copy/Paste the two sentences below to the desired location in the code starting from #Start of the macro
+
 # Read_if_tool_in (check_tool_in_spindel)
 # Read_if_tool_in (check_clamp_status)
 #-----------------------------------------------------------
@@ -38,24 +42,27 @@ def Read_if_tool_in (input_number):
     elif input_number == check_tool_in_spindel:  #indique le numero de l'entrée a controler comfiguré au debut du code
         mod_IP = d.getModule(ModuleType.IP, 0) # apelle le csmio ip-s
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet: #pinset =allumé
-            print("Un outil a été détecté dans la broche.") #message dans la console
+            print("sensor: tool detected") #message dans la console
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset: #pinreset = éteint
-            print("Il n'y a pas d'outil dans la broche.") #message dans la console
-            msg.info ("Il n'y a pas d'outil dans la broche.")
-            sys.exit(1)  #arrète le programe
+            print("There is no tool in the spindle.") #message dans la console
+            msg.info ("There is no tool in the spindle.")
+            sys.exit(1)  #arrète le programe (stop the program)
     elif input_number == check_clamp_status:  #2eme verification d'entrée
         mod_IP = d.getModule(ModuleType.IP, 0)
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset:
-            print("La pince est fermé")
+            print("sensor: Clamp closed")
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet:
-            print("La pince est ouvert")
-            msg.info("La pince est ouvert")
-            sys.exit(1)   #arrète le programe
+            print("Clamp open")
+            msg.info("Clamp open")
+            sys.exit(1)   #arrète le programe (stop the program)
 
 
 #-----------------------------------------------------------
-# Fonction regarde si l'outil a bien été libéré, "délivré" sinon stop le programe
+# Fonction regarde si l'outil a bien été libéré, sinon stop le programe
 # Copier/Coller les 2 phrases si dessous a l'endroit souhaité dans le code
+# Function checks if the tool has been properly released, otherwise stops the program
+# Copy/Paste the two sentences below to the desired location in the code
+#
 # Read_if_tool_out (check_tool_in_spindel)     
 # Read_if_tool_out (check_clamp_status)
 #-----------------------------------------------------------
@@ -67,29 +74,34 @@ def Read_if_tool_out(input_number):
     elif input_number == check_tool_in_spindel:
         mod_IP = d.getModule(ModuleType.IP, 0)
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet:
-            print("L'outil est reste dans la broche")
-            msg.info ("L'outil est reste dans la broche")
-            sys.exit(1)  #arrète le programe
+            print("The tool remains in the spindle")
+            msg.info ("The tool remains in the spindle")
+            sys.exit(1)  #arrète le programe (stop the program)
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset:
-            print("il n'y a pas d'outil dans la broche")
+            print("sensor: The tool has been successfully released")
     elif input_number == check_clamp_status:
         mod_IP = d.getModule(ModuleType.IP, 0)
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinReset:
-            print("La pince est resté fermé")
-            msg.info ("La pince est resté fermé")
-            sys.exit(1) #arrète le programe
+            print("The clamp sensor indicates that the clamp has remained closed.")
+            msg.info ("The clamp sensor indicates that the clamp has remained closed.")
+            sys.exit(1) #arrète le programe (stop the program)
         if mod_IP.getDigitalIO(IOPortDir.InputPort, input_number) == DIOPinVal.PinSet:
-            print("La pince est ouverte.")
+            print("sensor: Clamp Open")
 
 #-----------------------------------------------------------
 # Fonction pour Activer n'importe quelle sorties numériques spécifiée exemple:
-# allumé=   set_digital_output(valve_dustColect_under, DIOPinVal.PinSet)   
-# eteinte=  set_digital_output(valve_dustColect_under, DIOPinVal.PinReset)
-# remplacer 'valve_collet' pour géré d'autres sortie, voir au debut script)
+# allumé=       set_digital_output(valve_collet, DIOPinVal.PinSet)   
+# eteinte=      set_digital_output(valve_collet, DIOPinVal.PinReset)
+# remplacer 'valve_collet' pour géré d'autres sortie, voir configumachine.py)
+
+# Function to activate any specified digital outputs example:
+# on=           set_digital_output(valve_collet, DIOPinVal.PinSet)
+# off =         set_digital_output(valve_collet, DIOPinVal.PinReset)
+# here replace 'valve_collet' to handle other outputs, see configumachine.py)
 #-----------------------------------------------------------
 
 def set_digital_output(output_number, value):
-    if output_number is None:
+    if output_number is None: #if comfigemachine.py return No number but "None", the Function is ignored
         return
     try:
         mod_IP = d.getModule(ModuleType.IP, 0) # pour cismo ipS
@@ -105,6 +117,7 @@ def set_digital_output(output_number, value):
 
 #-----------------------------------------------------------
 #regarde si il y a un outil dans la broche, Si "pas d'outil" indique outil Zero dans simcnc.
+#(check if there is a tool in the spindle, If "no tool" indicates  tool zero in simcnc.)
 #-----------------------------------------------------------
 
 mod_IP = d.getModule(ModuleType.IP, 0)
@@ -113,16 +126,17 @@ if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.
     print(_("------------------\n NO TOOL IN SPINDEL.\n------------------"))
 
 #-----------------------------------------------------------
-# Intéroge le Csmio , et nome les valeurs en retour avec des noms
+# Interroge le Csmio , et nomme les valeurs en retour avec des noms
+#(Query the Csmio , and name the returned values with names)
 #--------------------------------------------------------------
 
-#recupère le numero d'outil sur la broche et le nome hold tool (Get the tool number on the spindle and name it "hold_tool".)
+# recupère le numero d'outil sur la broche et le nome hold tool (Get the tool number on the spindle and name it "hold_tool".)
 hold_tool = d.getSpindleToolNumber()
 
-#recupère le numero d'outil du gcode et le nome new tool (Get the tool number from the gcode and name it "new tool".)
+# recupère le numero d'outil du gcode et le nome new tool (Get the tool number from the gcode and name it "new tool".)
 new_tool = d.getSelectedToolNumber()
 
-#récupère la taille connu du nouvel outil (Get the known size of the new tool.)
+# récupère la taille connu du nouvel outil (Get the known size in simcnc of the new tool.)
 new_tool_length = d.getToolLength(new_tool)
 
 # Récupérer la position de la machine et la nome "position" (Retrieve the machine's position and name it "position".)
@@ -130,45 +144,40 @@ position = d.getPosition(CoordMode.Machine)
 # Récupérer la coordonnée Y et la nome y_coord (Retrieve the Y coordinate and name it y_coord.)
 y_coord = position[Y]  
 
-#supprimer les soft limite
+#supprimer les soft limite (remove soft limit)
 d.ignoreAllSoftLimits(True)
 
 #-----------------------------------------------------------
-# Empèche le g-code d'apeller de Prob3D
+# Empèche le gcode d'appeler de Prob3D (Prevent gcode from calling Prob3D)
 #-----------------------------------------------------------
 
 if new_tool == threeD_prob:
-    print("l'outil apellé dans le gcode ne peux pas etre le prob3D")
-    msg.info ("l'outil apellé le gcode ne peux pas etre le prob3D" "g-code err")
+    print("the tool called in the gcode cannot be the prob3D")
+    msg.info ("the tool called in the gcode cannot be the prob3D" "g-code num err")
 
 #-----------------------------------------------------------
 # Récupérer le numéro de l'outil dans la broche puis le raporte a ca place
 # Get the tool number in the spindle and then return it to its place.
 #-----------------------------------------------------------
 
-# evacue le récupérateur de poussières
+# evacue le récupérateur de poussières (# evacuates the dust collector)
 set_digital_output(valve_dustColect_out, DIOPinVal.PinSet)   
 time.sleep(2)
 set_digital_output(valve_dustColect_out, DIOPinVal.PinReset)
 
-#si new_tool = hold_tool ou si = zero , annule le changement d'outil (If new_tool equals hold_tool, cancel the tool change.)
+#si new_tool = hold_tool ou si = zero , annule le changement d'outil (If new_tool equals hold_tool or Zero, cancel the tool change.)
 if hold_tool != new_tool and hold_tool != 0: 
 
     if  hold_tool <= ToolCount:     #verifi si l'outil est compris entre 1 et tool count (Checks if the tool number is between 1 and tool count)
         print(_(f"------------------\n Storing tool number {hold_tool}\n------------------"))  # \n est un retour a la ligne
     else:
         msg.info(_("------------------\nThe tool called in the G-code does not exist", "Oups"))
-        sys.exit(1)  # Arrête le programme
+        sys.exit(1)  # Arrête le programme (stop code)
 
 
-    # Calculer la position X en fonction du numéro d'outil
+    # Calculer la position X en fonction du numéro d'outil (Calculate position X based on tool number)
     X_position_hold_tool = X_position_first_tool + ((hold_tool - 1) * X_distance_between_tools)
-    print(_(f"------------------\n Old tool va être rangé à l'emplacement: {hold_tool}\n------------------"))
-
-
-    # Récupérer la position de la machine et la nome "position" (Retrieve the machine's position and name it "position".)
-    position = d.getPosition(CoordMode.Machine)
-    y_coord = position[Y]  # Récupérer la coordonnée Y et la nome y_coord (Retrieve the Y coordinate and name it y_coord.)
+    print(_(f"------------------\n Old tool will be stored at the location: {hold_tool}\n------------------"))
 
     #-----------------------------------------------------------
     # Stop spindel
@@ -178,10 +187,10 @@ if hold_tool != new_tool and hold_tool != 0:
     start_time_stop_spin = time.time() #lance un chronometre (starts a timer )
 
     #-----------------------------------------------------------
-    #debut des mouvements , depose de hold_tool (beginning of the movements)
+    #debut des mouvements , déposer l'outil hold_tool (beginning of the movements,drop hold_tool)
     #-----------------------------------------------------------
 
-    # Déplacer l'axe Z en haut
+    # Déplacer l'axe Z en haut (Move Z axis up)
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_up_speed)
 
@@ -213,7 +222,7 @@ if hold_tool != new_tool and hold_tool != 0:
 
     # Un petit coup de soufflette (a quick blow of compressed air)
     set_digital_output(valve_blower, DIOPinVal.PinSet)
-    time.sleep (blowing_time) #temps du soufflage
+    time.sleep (blowing_time) #see timing in configemachine.py
     set_digital_output(valve_blower, DIOPinVal.PinReset)
 
     # Déplacer l'axe Z approche finale lente (Moving the Z-axis in slow final approach)
@@ -225,27 +234,27 @@ if hold_tool != new_tool and hold_tool != 0:
 # Récupérer le numéro d'outil du g code M6 puis calcule sa position puis mouvements (Retrieve the tool number from the M6 g-code, calculate its position, and perform the corresponding movements)
 #-----------------------------------------------------------
 
-if hold_tool != new_tool:
+if hold_tool != new_tool: #ignore le code si holdtool= newtool (skip code if holdtool= newtool)
 
     if  new_tool <= ToolCount:
-        # Si le numéro d'outil est plus grand que ToolCount, utiliser le modulo pour déterminer la position .Permet de configurer plus d'outils que d'emplacement disponible, emexple si toulcount=10  alors loutil 11 sera placer sur l'emplacement 1 ...
-        #(If the tool number is greater than ToolCount, use modulo to determine the position. This allows you to configure more tools than available locations. For example, if ToolCount=10, then tool 11 will be placed on location 1...)
+        # Vérifie que le nouvelle outil ne dépasse pas toolcount (Check that the new tool does not exceed toolcount)
         new_tool = (new_tool - 1) % ToolCount + 1   
         print(_(f"------------------\n Loading the new tool. {new_tool}\n------------------"))
     else:
         msg.info(_("Tool number called to large.", "Oups"))
         sys.exit(1)  # Arrête le programme "Stop the program."
 
-    # Libert l'outil ou ouvre la pince si il n'y avait pas d'outil (release the tool)
+    # Libert l'outil ou ouvre la pince si il n'y avait pas d'outil (relaes the tool or opens the clamp if there was no tool)
     set_digital_output(valve_collet, DIOPinVal.PinSet)
 
-    # Nome l'outil Zero dans simcnc
+    # Nomme l'outil Zero dans simcnc, En cas d'arret d'urgence il est important que simcnc sache qu'il n'y a plus d'outil
+    # Name the tool Zero in simcnc, In case of emergency stop it is important that simcnc knows that there is no more tool
     d.setToolOffsetNumber(0)
 
-    # Pause pour l'ouverture de la pince
+    # Pause pour l'ouverture de la pince (Pause for clamp opening)
     time.sleep (0.5)
 
-    # Si le debut du script a été passé a cose d'un outil Zero alors  replace Y
+    # Si le debut du script a été passé a cause d'un outil Zero alors  replace Y ( If the start of the script was skipped because of a Zero tool then replace Y)
     position[Y] = Y_position_first_tool
     d.moveToPosition(CoordMode.Machine, position, YX_speed)
 
@@ -284,7 +293,7 @@ if hold_tool != new_tool:
     #pause
     time.sleep (0.5)
 
-    # indique a simcnc que le nouvelle outil est en place, ses lignes de code sont la si vous stoper le programe en route
+    # indique a simcnc que le nouvelle outil est en place ,(tells simcnc that the new tool is in place)
     d.setToolLength (new_tool,new_tool_length)
     d.setToolOffsetNumber(new_tool)
     d.setSpindleToolNumber(new_tool)
@@ -339,27 +348,27 @@ if do_i_have_prob == True: #regarde au debut du code si oui ou non la mesure doi
         time.sleep (blowing_time) #temps du soufflage
         set_digital_output(valve_blower, DIOPinVal.PinReset)
 
-        # début de la mesure rapide
+        # début de la mesure rapide  (fast prob)
         position[Axis.Z.value] = zEndPosition
         probeResult = d.executeProbing(CoordMode.Machine, position, probeIndex, fastProbeVel)
         if(probeResult == False):
             sys.exit(_("fast probing failed!"))
 
-        # recupère la mesure rapide
+        # recupère la mesure rapide (save the result fast prob)
         fastProbeFinishPos = d.getProbingPosition(CoordMode.Machine)
 
-        # remonté de Z entre les 2 mesures
+        # remonté de Z entre les 2 mesures (Z up for 2 mesur)
         d.moveAxisIncremental(Axis.Z, goUpDist, Z_up_speed)
 
         # pause entre les deux mesures
         time.sleep(fineProbingDelay)
 
-        # debut de la mesure lente
+        # debut de la mesure lente (slow prob)
         probeResult = d.executeProbing(CoordMode.Machine, position, probeIndex, slowProbeVel)
         if(probeResult == False):
             sys.exit(_("slow probing failed!"))
 
-        # récupère la mesure lente
+        # récupère la mesure lente (save the slow prob)
         probeFinishPos = d.getProbingPosition(CoordMode.Machine)
 
         # regararde la différence entre les deux mesures (Look at the difference between the two measurements)
@@ -372,14 +381,14 @@ if do_i_have_prob == True: #regarde au debut du code si oui ou non la mesure doi
         # calcule le décalage de l'outil (calculate  tool length)
         new_tool_length = probeFinishPos[Axis.Z.value] - refToolProbePos
 
-        # remonté du Z a O
+        # remonté du Z a O  
         position[Axis.Z.value] = 0
         d.moveToPosition(CoordMode.Machine, position, Z_up_speed)
 
-        # imprime dans la console le décalage de l'outil new tool
+        # imprime dans la console le décalage de l'outil new tool  (print in chat the result)
         print(_("décalage d'outil({:d}) : {:.4f}".format(new_tool, new_tool_length)))
 
-        # retour dans la zone de soft limite 
+        # retour dans la zone de soft limite  (back in y safe zone)
         position[Y] = Y_position_safe_zone
         d.moveToPosition(CoordMode.Machine, position, YX_speed)
 
@@ -395,6 +404,7 @@ else:
 position[Y] = Y_position_safe_zone
 d.moveToPosition(CoordMode.Machine, position, YX_speed)
 
+#Dust shoe back in place
 set_digital_output(valve_dustColect_under, DIOPinVal.PinSet)   
 time.sleep(2)
 set_digital_output(valve_dustColect_under, DIOPinVal.PinReset)
