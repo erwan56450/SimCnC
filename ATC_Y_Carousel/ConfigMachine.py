@@ -21,7 +21,7 @@ Y_speed_final = 2000              # Vitesse  y d'aproche finale pour ranger l'ou
 C_speed = 2000                    # vitesse de C "porte outils"
 
 # positions
-time_spindle_stop = 8               # temps en seconde  de l'arrete de votre broche avec l'outil le plus lourd (time in seconds for the stop of your spindel with the heaviest tool)
+
 Y_approch = -230                    # position y de la broche avant de rentrer l'outil de la port outil
 Y_tool_clamp= -300                  # position y final de la broche dans un porte outil
 Z_position_clean = -120             # distance a la quel le z descent pour nettoyage du cone
@@ -29,7 +29,7 @@ Z_position_tools = -158             # emplacement Z ou l'outil est libéré (loc
 C_position_first_tool = 40          # position de C quand la fraise est en place dans le tourniquet a la position 1 ,ne doit pas etre plus grand que last_tool
 C_position_last_tool = 355          # position de C quand la fraise est en place dans le tourniquet a la position du dernier outil
 
-# numeros d'entrée/sorties
+# input/output csmio number (instead a number, with " Bone " and it will be ignore)
 Tool_Count = 8                      # Nombre max. d'outils dans le port outils
 check_tool_in_spindel = 9           # Numéro de l'entrée numérique qui gère le détecteur d'outil inséré  None=desactivé (Digital input number managing the tool detection sensor)
 check_clamp_status =8               # Numéro de l'entrée numérique qui gère le détecteur d'ouverture de la griffe du conne None=desactivé (Digital input number managing the cone clamp open sensor)
@@ -38,7 +38,11 @@ valve_clean_cone = 14               # Numéro de la sortie numérique qui gère 
 valve_blower = 12                   # Numéro de la sortie numérique qui gère la valve de la soufflette None=desactivé (Digital output number managing the valve for the blower)
 valve_dor = 7                       # Numéro de la sortie numérique qui gère la valve d'ouverture porte du tourniquet None=desactivé
 valve_dust_colector = 15            # Numéro de la sortie numérique qui gère la valve du levage de récupérateur de poussières None=desactivé
+
+#time
+time_spindle_stop = 15              # temps en seconde  de l'arrete de votre broche avec l'outil le plus lourd (time in seconds for the stop of your spindel with the heaviest tool)
 blowing_time = 0.5                  # temps en seconde du coup de soufflette a la dépose d'un outil ou a la mesure (Time in seconds of the blower at the tool drop or measurement).
+
 
 #-----------------------------------------------------------
 # Infos sur le Contacteur de palpage (probing infos)

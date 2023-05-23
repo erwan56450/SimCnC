@@ -32,18 +32,18 @@ Z_position_tools = -206.5           # emplacement Z ou l'outil est libéré (loc
 Z_position_approach = -170          # emplacement Z ou il faut commencer a ralentir et declanche valve_clean_cone ou valve_blower  (location where it is necessary to start slowing down and trigger the air conne cleaner)
 X_distance_between_tools = -150     # distance entre les support d'outils sur la table (distance between tool holders)
 
-# numeros d'entrée/sorties  (None =not use)
+# input/output csmio number (instead a number, with " Bone " and it will be ignore)
 check_tool_in_spindel = 24          # Numéro de l'entrée numérique qui gère le détecteur d'outil inséré, None=desactivé (Digital input number managing the tool detection sensor)
 check_clamp_status = 25             # Numéro de l'entrée numérique qui gère le détecteur d'ouverture de la griffe du conne , None=desactivé (Digital input number managing the cone clamp open sensor)
 valve_collet = 13                   # Numéro de la sortie numérique qui gère la valve pour le changement d'outil (Digital output number managing the valve for tool change)
-valve_clean_cone = 14               # Numéro de la sortie numérique qui gère la valve pour le nettoyage du cone du porte outil (Digital output number managing the valve for tool holder cone cleaning)
-valve_dustColect_out = 9
-valve_dustColect_under = 11
+valve_clean_cone = 14               # Digital output number managing the valve for tool holder cone cleaning)
+valve_dustColect_out = 9            # Remove dust shoe
+valve_dustColect_under = 11         # put the dust shoe ready to suck
 valve_blower = 12                   # Numéro de la sortie numérique qui gère la valve de la soufflette (Digital output number managing the valve for the blower)
 
 # time
 blowing_time = 0.5                  # temps en seconde du coup de soufflette a la dépose d'un outil ou a la mesure (Time in seconds of the blower at the tool drop or measurement).
-time_spindle_stop = 8               # temps en seconde  de l'arrete de votre broche avec l'outil le plus lourd (time in seconds for the stop of your spindel with the heaviest tool)
+time_spindle_stop = 15              # WARNING If to short you will destroy your spindel. Time in seconds for the stop of your spindel with the heaviest tool
 
 #-----------------------------------------------------------
 # Infos sur le Contacteur de palpage (probing infos)

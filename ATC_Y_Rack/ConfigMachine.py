@@ -33,7 +33,7 @@ Z_position_tools = -110             # location where the tool is released
 Z_position_approach = -80           # location where it is necessary to start slowing down and trigger the air conne cleaner
 X_distance_between_tools = -100     # distance between each tool holders
 
-# numeros d'entrée/sorties  (put None =not use)
+# input/output csmio number (instead a number, with " Bone " and it will be ignore)
 check_tool_in_spindel = 24          # Digital input number managing the tool detection sensor
 check_clamp_status = 25             # Digital input number managing the cone clamp open sensor
 valve_collet = 13                   # Digital output number managing the valve for tool change
@@ -44,7 +44,7 @@ valve_blower = None                 # Digital output number managing the valve f
 
 # time
 blowing_time = 0.5                  # Time in seconds of the blower at the tool drop or measurement
-time_spindle_stop = 8               # time in seconds for the stop of your spindel with the heaviest tool
+time_spindle_stop = 15              # WARNING If to short you will destroy your spindel. Time in seconds for the stop of your spindel with the heaviest tool
 
 #-----------------------------------------------------------
 # Infos sur le Contacteur de palpage (probing infos)
