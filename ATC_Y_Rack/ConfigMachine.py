@@ -16,34 +16,34 @@
 #-----------------------------------------------------------
 
 # infos
-ToolCount = 11                      # Nombre max. d'outils sur la table premier outil =1 (Maximum number of tools on the table, first tool=1)
+ToolCount = 5                      # Nombre max. d'outils sur la table premier outil =1 (Maximum number of tools on the table, first tool=1)
 
 # vitesses (speed)
-Z_down_final_speed = 2000           # Vitesse de Z d'aproche finale lente (slow final approach speed of Z)
-Z_down_fast_speed = 5000            # vitesse de Z d'aproche rapide (fast approach speed of Z)
-Z_up_speed = 10000                  # viteese de lever du Z (speed to lift Z)
-YX_speed = 50000                    # Vitesse de l'axe Y et X (speed of Y and X axis)
+Z_down_final_speed = 1000           # slow final approach speed of Z
+Z_down_fast_speed = 1500            # fast approach speed of Z
+Z_up_speed = 2000                   # speed to lift up Z
+YX_speed = 3000                     # speed of Y and X axis
 
 # positions
-Y_position_first_tool = -60         # position Y du trou (Y position of the hole)
-Y_position_safe_zone = -210         # zone ou les outils peuvent circuler sur l'axe X sans toucher les autres porte outils (zone where tools can move on the X axis without touching each other)
-X_position_first_tool = -296        # position du premier outil (position of the first tool)
-Z_position_tools = -206.5           # emplacement Z ou l'outil est libéré (location where the tool is released)
-Z_position_approach = -170          # emplacement Z ou il faut commencer a ralentir et declanche valve_clean_cone ou valve_blower  (location where it is necessary to start slowing down and trigger the air conne cleaner)
-X_distance_between_tools = -150     # distance entre les support d'outils sur la table (distance between tool holders)
+Y_position_first_tool = 90          # Y position of the hole
+X_position_safe_zone = 80           # zone where tools can move on the Y axis without touching each other 
+X_position_first_tool = 90          # position of the first tool
+Z_position_tools = -110             # location where the tool is released
+Z_position_approach = -80           # location where it is necessary to start slowing down and trigger the air conne cleaner
+X_distance_between_tools = -100     # distance between each tool holders
 
-# numeros d'entrée/sorties  (None =not use)
-check_tool_in_spindel = 24          # Numéro de l'entrée numérique qui gère le détecteur d'outil inséré, None=desactivé (Digital input number managing the tool detection sensor)
-check_clamp_status = 25             # Numéro de l'entrée numérique qui gère le détecteur d'ouverture de la griffe du conne , None=desactivé (Digital input number managing the cone clamp open sensor)
-valve_collet = 13                   # Numéro de la sortie numérique qui gère la valve pour le changement d'outil (Digital output number managing the valve for tool change)
-valve_clean_cone = 14               # Numéro de la sortie numérique qui gère la valve pour le nettoyage du cone du porte outil (Digital output number managing the valve for tool holder cone cleaning)
-valve_dustColect_out = 9
-valve_dustColect_under = 11
-valve_blower = 12                   # Numéro de la sortie numérique qui gère la valve de la soufflette (Digital output number managing the valve for the blower)
+# numeros d'entrée/sorties  (put None =not use)
+check_tool_in_spindel = 24          # Digital input number managing the tool detection sensor
+check_clamp_status = 25             # Digital input number managing the cone clamp open sensor
+valve_collet = 13                   # Digital output number managing the valve for tool change
+valve_clean_cone = 14               # Digital output number managing the valve for tool holder cone cleaning
+valve_dustColect_out = None         # Remove dust shoe
+valve_dustColect_under = None       # put the dust shoe ready to suck
+valve_blower = None                 # Digital output number managing the valve for the blower
 
 # time
-blowing_time = 0.5                  # temps en seconde du coup de soufflette a la dépose d'un outil ou a la mesure (Time in seconds of the blower at the tool drop or measurement).
-time_spindle_stop = 8               # temps en seconde  de l'arrete de votre broche avec l'outil le plus lourd (time in seconds for the stop of your spindel with the heaviest tool)
+blowing_time = 0.5                  # Time in seconds of the blower at the tool drop or measurement
+time_spindle_stop = 8               # time in seconds for the stop of your spindel with the heaviest tool
 
 #-----------------------------------------------------------
 # Infos sur le Contacteur de palpage (probing infos)
@@ -51,7 +51,7 @@ time_spindle_stop = 8               # temps en seconde  de l'arrete de votre bro
 
 do_i_have_prob = True               # True = mesure d'outil activée. False = mesure d'outil desactivée ( True = tool measurement enabled. False = tool measurement disabled)
 every_time_get_measure = True       # True = mesure a tous les coups, False = mesure que si la table d'outil est a zero (True = measure every time, False = measure only if tool table is at zero)
-probeStartAbsPos = {'X_probe': -108, 'Y_probe': -60, 'Z_probe': -80} # Coordonnées de placement au dessus du prob [X_probe, Y_probe, Z_probe] votre outil le plus long doit passer avec ce Z! (Placement coordinates above the probe [X_probe, Y_probe, Z_probe] Your longest tool must pass with this Z!)
+probeStartAbsPos = {'X_probe': 10, 'Y_probe': 90, 'Z_probe': -80} # Coordonnées de placement au dessus du prob [X_probe, Y_probe, Z_probe] votre outil le plus long doit passer avec ce Z! (Placement coordinates above the probe [X_probe, Y_probe, Z_probe] Your longest tool must pass with this Z!)
 probeIndex = 0                      # correspond a l'entrée que vous avez configuré dans les settings de simcnc (settings->Modules->IO Signals  : 0,1,2 ou 3 possible) (corresponds to the input you configured in the simcnc settings)
 zEndPosition = -190                 # l'axe z ne descendra pas plus loint! (The Z-axis will not go down any further!)
 refToolProbePos = -143.67           # Hauteur a la quelle votre outil de reférénce touche le prob, (si votre outil de référence touche a Z-100mm et que vous indiquez - 100mm ici, alors le décalage enregistré sera de 0mm) (Height at which your reference tool touches the probe (if your reference tool touches at Z-100mm and you indicate - 100mm here, then it will be referenced to 0mm))
@@ -64,19 +64,6 @@ fineProbeMaxAllowedDiff = 0.1       # Tolerence entre les deux mesures (toleranc
 moveX = True                        # Ne pas changer (Do not change)
 moveY = True                        # Ne pas changer (Do not change)
 
-#-----------------------------------------------------------
-# WORK IN PROGRESS 
-# 3d prob infos (infos si dessous utilisé par le fichier 3d_prob.py)
-#-----------------------------------------------------------
-
-threeD_prob = None                  # numero de l'emplacement prob-3d, si PAS de prob3D indiquer "None" 
-threeD_probeIndex = 2               # correspond a l'entrée que vous avez configuré dans les settings de simcnc (0,1,2 ou 3 possible)
-wake_up_prob = True                 # fait tourner le prob pour l'allumer
-wake_up_speed = 500                 # vitesse de rotation du reveil
-wake_up_time = 0.5                  # Temps de totation du reveil
-threeD_fastProbeVel = 700           # vitesse de la premiere mesure, rapide (units/min) (Speed of the first, fast measurement (units/min))
-threeD_slowProbeVel = 250           # vitesse du deuxieme mesure, lente (units/min) (Speed of the second, slow measurement (units/min))
-threeD_retract = 5
 
 #-----------------------------------------------------------
 # Donne un noms a l'axe quand getposition est utilisé.
