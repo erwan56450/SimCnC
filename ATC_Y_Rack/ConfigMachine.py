@@ -15,6 +15,7 @@
 # INfos sur la machine (Machine informations)
 #-----------------------------------------------------------
 
+
 # infos
 ToolCount = 5                      # Nombre max. d'outils sur la table premier outil =1 (Maximum number of tools on the table, first tool=1)
 
@@ -77,3 +78,6 @@ Y = 1
 Z = 2
 A = 3
 C = 5
+
+
+Erwan@fridu.net
