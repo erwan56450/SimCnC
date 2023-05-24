@@ -25,25 +25,25 @@ Z_up_speed = 10000                  # viteese de lever du Z (speed to lift Z)
 YX_speed = 50000                    # Vitesse de l'axe Y et X (speed of Y and X axis)
 
 # positions
-Y_position_first_tool = -60         # position Y du trou (Y position of the hole)
-Y_position_safe_zone = -210         # zone ou les outils peuvent circuler sur l'axe X sans toucher les autres porte outils (zone where tools can move on the X axis without touching each other)
-X_position_first_tool = -296        # position du premier outil (position of the first tool)
-Z_position_tools = -206.5           # emplacement Z ou l'outil est libéré (location where the tool is released)
-Z_position_approach = -170          # emplacement Z ou il faut commencer a ralentir et declanche valve_clean_cone ou valve_blower  (location where it is necessary to start slowing down and trigger the air conne cleaner)
-X_distance_between_tools = -150     # distance entre les support d'outils sur la table (distance between tool holders)
+Y_position_first_tool = -60         # Y position of the first tool hole.
+Y_position_safe_zone = -210         # zone where tools can move on the X axis without touching each other tools stored
+X_position_first_tool = -296        # position of the first tool)
+Z_position_tools = -206.5           # location where the tool is released)
+Z_position_approach = -170          # location where it is necessary to start slowing down and trigger the air conne cleaner
+X_distance_between_tools = -150     # distance between each tool holders
 
 # input/output csmio number (instead a number, with " Bone " and it will be ignore)
-check_tool_in_spindel = 24          # Numéro de l'entrée numérique qui gère le détecteur d'outil inséré, None=desactivé (Digital input number managing the tool detection sensor)
-check_clamp_status = 25             # Numéro de l'entrée numérique qui gère le détecteur d'ouverture de la griffe du conne , None=desactivé (Digital input number managing the cone clamp open sensor)
-valve_collet = 13                   # Numéro de la sortie numérique qui gère la valve pour le changement d'outil (Digital output number managing the valve for tool change)
-valve_clean_cone = 14               # Digital output number managing the valve for tool holder cone cleaning)
+check_tool_in_spindel = 24          # Digital input number managing the tool detection sensor.
+check_clamp_status = 25             # Digital input number managing the cone clamp open sensor.
+valve_collet = 13                   # Digital output number managing the valve for tool change.
+valve_clean_cone = 14               # Digital output number managing the valve for tool holder cone cleaning.
 valve_dustColect_out = 9            # Remove dust shoe
 valve_dustColect_under = 11         # put the dust shoe ready to suck
-valve_blower = 12                   # Numéro de la sortie numérique qui gère la valve de la soufflette (Digital output number managing the valve for the blower)
+valve_blower = 12                   # Digital output number managing the valve for the blower
 
 # time
-blowing_time = 0.5                  # temps en seconde du coup de soufflette a la dépose d'un outil ou a la mesure (Time in seconds of the blower at the tool drop or measurement).
-time_spindle_stop = 15              # WARNING If to short you will destroy your spindel. Time in seconds for the stop of your spindel with the heaviest tool
+blowing_time = 0.5                  # Time in seconds of the blower at the tool drop or measurement.
+time_spindle_stop = 15              # WARNING If to short you will destroy your spindel. Time in seconds for the stop of your spindel with the heaviest tool.
 
 #-----------------------------------------------------------
 # Infos sur le Contacteur de palpage (probing infos)
@@ -79,10 +79,10 @@ threeD_slowProbeVel = 250           # vitesse du deuxieme mesure, lente (units/m
 threeD_retract = 5
 
 #-----------------------------------------------------------
-# Donne un noms a l'axe quand getposition est utilisé.
-# "d.getPosition(CoordMode.Machine)"  renvoie une posision machine qui si la machine est a zero sera: 0.0.0.0.0.0                             
-# Ses lignes de code servent a nommer chaque chiffre retrounés de la sorte X.Y.Z.A.B.C, ici le premier zero qui est en position 0 est nomé X le 2eme qui est en position 1 est nomé Y ex..                              
-# Si votre ligne/chargeur d'outils est sur Y et non X comme moi, alors vous pouvez soit remplacer tous les X dans le code m6.py par des Y, soit ici nomer X=1 Y=0 (astuce que je n'ai pas testé)
+# Assigns a name to each axis when using getposition.
+# "d.getPosition(CoordMode.Machine)" returns a machine position which, if the machine is at zero, will be: 0.0.0.0.0.0
+# These lines of code are used to name each digit returned in the format X.Y.Z.A.B.C, where the first zero at position 0 is named X, the second zero at position 1 is named Y, etc.
+# If your tool changer/holder is on the Y-axis instead of X-axis like mine, you can either replace all the X's in the code m6.py with Y's, or here, name X=1 and Y=0 (a trick I haven't tested).
 #-----------------------------------------------------------
 
 X = 0

@@ -380,7 +380,7 @@ if do_i_have_prob == True:
         #fin script probing
         #-----------------------------------------------------------
     else:
-        print("-------------------\n outil {new_tool} deja mesuré \n--------------------")     
+        print(f"-------------------\n outil {new_tool} deja mesuré \n--------------------")     
 else:
     print("-------------------\n Mesure d'outil annulée, pas de palpeur instalé\n--------------------") 
 

@@ -16,19 +16,16 @@ import time   # importe le temps pour la fonction time.sleep (import time for th
 import sys    # pour utiliser la fonction sys.exit() (to use the sys.exit() function)
 
 #-----------------------------------------------------------
+# WORK IN PROGRESS
 # Importe le tradution du fichier multilingual.py a placer dans le meme répèretoir que M6
 #-----------------------------------------------------------
 try:
     from multilingual import _
 except ModuleNotFoundError:
-    print("The multilingual.py file cannot be found. Traduction pas disponible.")
+    print("The multilingual.py file cannot be found. WORK IN PROGRESS.")
     
     def _(text):
         return text
-
-
-
-
 #-----------------------------------------------------------
 # Fonction regarde si un outil est en place , sinon stop le programe
 # C'est contacts sont prévue pour ma fraise et probablement pas la votre
@@ -123,6 +120,7 @@ if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.
 
 # Récupérer la position de la machine et la nome "position" (Retrieve the machine's position and name it "position".)
 position = d.getPosition(CoordMode.Machine)
+
 # Récupérer la coordonnée Y et la nome y_coord (Retrieve the Y coordinate and name it y_coord.)
 y_coord = position[Y]  
 
@@ -138,11 +136,11 @@ hold_tool = d.getSpindleToolNumber()
 
 
 
-if  hold_tool <= ToolCount:  and  threeD_prob <= ToolCount: #verifi si l'outil est compris entre 1 et tool count (Checks if the tool number is between 1 and tool count)
-else:
+if hold_tool > ToolCount and threeD_prob > ToolCount:  # Vérifie si le numéro d'outil est entre 1 et ToolCount
     msg.info(_("------------------\n Emplacement du prob ou numero hold_tool trop grand", "Oups"))
     print(_("------------------\n Emplacement du prob ou numero hold_tool trop grand"))
     sys.exit(1)  # Arrête le programme
+
 
 #-----------------------------------------------------------
 # Récupérer le numéro de l'outil dans la broche puis le raporte a ca place
@@ -150,8 +148,9 @@ else:
 #-----------------------------------------------------------
 
 
-#si hold_tool n'est pas égale a Zero ou si le 3Dprob n'est pas deja en place execute le rangelement d'outils
-if hold_tool != 0 or hold_tool != threeD_prob:
+#If hold_tool is not equal to zero or if the 3D probe is not already in place, execute the curent tool storage.
+if hold_tool != 0 and hold_tool != threeD_prob:
+    
 
 
     # Calculer la position X en fonction du numéro d'outil
@@ -290,7 +289,7 @@ if hold_tool != threeD_prob:
     #fin des mouvements de changement d'outils (End of tool change movements)
     #-----------------------------------------------------------
 else:
-    print(_(f"-------------------\n The 3d prob already in place \n--------------------"))
+    print(_("-------------------\n The 3d prob already in place \n--------------------"))
 
 
 
@@ -303,12 +302,19 @@ position[Z] = 0
 d.moveToPosition(CoordMode.Machine, position, Z_up_speed)
 
 
-if wake_up_prob == True
+if wake_up_prob == True:
     #Petit démarage de broche pour reveiller le 3dprob (https://vers.ge/en/)
-    d.executeGCode( "M3 S500" )
+    print(_("-------------------\n WAKE UP 3D PROB \n--------------------"))
+    d.executeGCode( "M3 S3000" )
     time.sleep(wake_up_time)
     d.setSpindleState( SpindleState.OFF )
     time.sleep(wake_up_time)
 
 # Récupérer la position .Program et la nome "position_prog" (Retrieve the Program position and name it "position_prog".)
 position_prog = d.getPosition(CoordMode.Program)
+
+#moving to the Y=0 X=0 
+position[Y] = 0
+position[X] = 0
+d.moveToPosition(CoordMode.Program, position, YX_speed)
+

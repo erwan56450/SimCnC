@@ -27,7 +27,7 @@ YX_speed = 3000                     # speed of Y and X axis
 
 # positions
 Y_position_first_tool = 90          # Y position of the hole
-X_position_safe_zone = 80           # zone where tools can move on the Y axis without touching each other 
+X_position_safe_zone = 80           # zone where tools can move on the Y axis without touching each tools stored
 X_position_first_tool = 90          # position of the first tool
 Z_position_tools = -110             # location where the tool is released
 Z_position_approach = -80           # location where it is necessary to start slowing down and trigger the air conne cleaner

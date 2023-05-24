@@ -3,6 +3,18 @@ import sys
 import time
 from ConfigMachine import *
 
+
+#-----------------------------------------------------------
+# WORK IN PROGRESS
+# Importe le tradution du fichier multilingual.py a placer dans le meme répèretoir que M6
+#-----------------------------------------------------------
+try:
+    from multilingual import _
+except ModuleNotFoundError:
+    print("The multilingual.py file cannot be found. WORK IN PROGRESS.")
+    
+    def _(text):
+        return text
 #-----------------------------------------------------------
 # Fonction pour Activer n'importe quelle sorties numériques spécifiée exemple:
 # allumé=   set_digital_output(valve_collet, DIOPinVal.PinSet)   
@@ -30,15 +42,20 @@ position = d.getPosition(CoordMode.Machine)
 d.ignoreAllSoftLimits(True)
 
 #-----------------------------------------------------------
-#regarde si il y a un outil dans la broche, Si "non" nome l'outil en place dans Simcnc "Zero".
+#regarde si il y a un outil dans la broche, Si "non" indique dans Simcnc outil "Zero".
 #-----------------------------------------------------------
 
 mod_IP = d.getModule(ModuleType.IP, 0)
+
 if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.PinReset:
     d.setSpindleToolNumber("0")
     print(_("------------------\nNO TOOL IN SPINDEL.\n------------------"))
-    msg.info("NO TOOL IN SPINDEL", "Info")# Affiche un message dans la console
-    sys.exit(1) # Arrête le programme
+    msg.info("NO TOOL IN SPINDEL", "Info")  #error message
+    sys.exit(1) # stop the programe
+
+#-----------------------------------------------------------
+#Start moving
+#-----------------------------------------------------------
 
 print(_(f"------------------\n Tool {current_tool} Launching the measurement process .\n------------------"))
     
@@ -60,7 +77,7 @@ set_digital_output(valve_blower, DIOPinVal.PinSet)
 time.sleep (blowing_time) #temps du soufflage
 set_digital_output(valve_blower, DIOPinVal.PinReset)
 
-# début de la mesure rapide
+# start speed mesurement
 position[Axis.Z.value] = zEndPosition
 probeResult = d.executeProbing(CoordMode.Machine, position, probeIndex, fastProbeVel)
 if(probeResult == False):

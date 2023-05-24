@@ -15,7 +15,17 @@ from ConfigMachine import * #Import le fichier ConfigMachine.py qui doit ce trou
 import time   # importe le temps pour la fonction time.sleep (import time for the function time.sleep)
 import sys    # pour utiliser la fonction sys.exit() (to use the sys.exit() function)
 
-
+#-----------------------------------------------------------
+# WORK IN PROGRESS
+# Importe le tradution du fichier multilingual.py a placer dans le meme répèretoir que M6
+#-----------------------------------------------------------
+try:
+    from multilingual import _
+except ModuleNotFoundError:
+    print("The multilingual.py file cannot be found. Traduction pas disponible.")
+    
+    def _(text):
+        return text
 #-----------------------------------------------------------
 # Fonction regarde si un outil est en place , sinon stop le programe
 # Copier/Coller les 2 phrases si dessous a l'endroit souhaité dans le code a partir de #Debut de la macro
@@ -387,7 +397,7 @@ if do_i_have_prob == True: #regarde au debut du code si oui ou non la mesure doi
         #fin script probing
         #-----------------------------------------------------------
     else:
-        print(_("-------------------\n Tool {new_tool} already install \n--------------------"))    
+        print(_(f"-------------------\n Tool {new_tool} already mesured \n--------------------"))    
 else:
     print(_("-------------------\n Tool measurement cancelled, no probe installed \n--------------------"))
 

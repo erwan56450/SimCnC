@@ -22,13 +22,11 @@ import sys    # pour utiliser la fonction sys.exit() (to use the sys.exit() func
 try:
     from multilingual import _
 except ModuleNotFoundError:
-    print("The multilingual.py file cannot be found. Traduction pas disponible.")
+    print("The multilingual.py file cannot be found. WORK IN PROGRESS.")
     
     def _(text):
         return text
 #-----------------------------------------------------------
-# Fonction regarde si un outil est en place , sinon stop le programe
-# Copier/Coller les 2 phrases si dessous a l'endroit souhaité dans le code a partir de #Debut de la macro
 # Function checks if a tool is in place, otherwise stops the program
 # Copy/Paste the two sentences below to the desired location in the code starting from #Start of the macro
 
@@ -58,8 +56,6 @@ def Read_if_tool_in (input_number):
 
 
 #-----------------------------------------------------------
-# Fonction regarde si l'outil a bien été libéré, sinon stop le programe
-# Copier/Coller les 2 phrases si dessous a l'endroit souhaité dans le code
 # Function checks if the tool has been properly released, otherwise stops the program
 # Copy/Paste the two sentences below to the desired location in the code
 #
@@ -89,11 +85,6 @@ def Read_if_tool_out(input_number):
             print("sensor: Clamp Open")
 
 #-----------------------------------------------------------
-# Fonction pour Activer n'importe quelle sorties numériques spécifiée exemple:
-# allumé=       set_digital_output(valve_collet, DIOPinVal.PinSet)   
-# eteinte=      set_digital_output(valve_collet, DIOPinVal.PinReset)
-# remplacer 'valve_collet' pour géré d'autres sortie, voir configumachine.py)
-
 # Function to activate any specified digital outputs example:
 # on=           set_digital_output(valve_collet, DIOPinVal.PinSet)
 # off =         set_digital_output(valve_collet, DIOPinVal.PinReset)
@@ -116,8 +107,7 @@ def set_digital_output(output_number, value):
 ############################################################
 
 #-----------------------------------------------------------
-#regarde si il y a un outil dans la broche, Si "pas d'outil" indique outil Zero dans simcnc.
-#(check if there is a tool in the spindle, If "no tool" indicates  tool zero in simcnc.)
+# Check if there is a tool in the spindle, If "no tool" indicates  tool zero in simcnc.
 #-----------------------------------------------------------
 
 mod_IP = d.getModule(ModuleType.IP, 0)
@@ -126,38 +116,36 @@ if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.
     print(_("------------------\n NO TOOL IN SPINDEL.\n------------------"))
 
 #-----------------------------------------------------------
-# Interroge le Csmio , et nomme les valeurs en retour avec des noms
-#(Query the Csmio , and name the returned values with names)
+# Ask the Csmio , and name the returned values with names.
 #--------------------------------------------------------------
 
-# recupère le numero d'outil sur la broche et le nome hold tool (Get the tool number on the spindle and name it "hold_tool".)
+# Get the tool number on the spindle and name it "hold_tool".
 hold_tool = d.getSpindleToolNumber()
 
-# recupère le numero d'outil du gcode et le nome new tool (Get the tool number from the gcode and name it "new tool".)
+# Get the tool number from the gcode and name it "new tool".
 new_tool = d.getSelectedToolNumber()
 
-# récupère la taille connu du nouvel outil (Get the known size in simcnc of the new tool.)
+# Get the known size in simcnc of the new tool.
 new_tool_length = d.getToolLength(new_tool)
 
-# Récupérer la position de la machine et la nome "position" (Retrieve the machine's position and name it "position".)
+# Get the machine's position and name it "position".
 position = d.getPosition(CoordMode.Machine)
-# Récupérer la coordonnée Y et la nome y_coord (Retrieve the Y coordinate and name it y_coord.)
+# Get the Y coordinate and name it y_coord.
 y_coord = position[Y]  
 
-#supprimer les soft limite (remove soft limit)
+# Remove soft limit.
 d.ignoreAllSoftLimits(True)
 
 #-----------------------------------------------------------
-# Empèche le gcode d'appeler de Prob3D (Prevent gcode from calling Prob3D)
+# Prevent gcode from calling Prob3D
 #-----------------------------------------------------------
 
-if new_tool == threeD_prob:
-    print("the tool called in the gcode cannot be the prob3D")
-    msg.info ("the tool called in the gcode cannot be the prob3D" "g-code num err")
-    sys.exit(1)  #arrète le programe (stop the program)
+if threeD_prob is not None and new_tool == threeD_prob:
+    print("The tool called in the gcode cannot be the prob3D")
+    msg.info("The tool called in the gcode cannot be the prob3D" "g-code num err")
+    sys.exit(1)  # Arrête le programme (stop the program)
     
 #-----------------------------------------------------------
-# Récupérer le numéro de l'outil dans la broche puis le raporte a ca place
 # Get the tool number in the spindle and then return it to its place.
 #-----------------------------------------------------------
 
@@ -166,11 +154,11 @@ set_digital_output(valve_dustColect_out, DIOPinVal.PinSet)
 time.sleep(2)
 set_digital_output(valve_dustColect_out, DIOPinVal.PinReset)
 
-#si new_tool = hold_tool ou si = zero , annule le changement d'outil (If new_tool equals hold_tool or Zero, cancel the tool change.)
+# If new_tool equals hold_tool or Zero, Skip procedure of storing hold tool
 if hold_tool != new_tool and hold_tool != 0: 
 
-    if  hold_tool <= ToolCount:     #verifi si l'outil est compris entre 1 et tool count (Checks if the tool number is between 1 and tool count)
-        print(_(f"------------------\n Storing tool number {hold_tool}\n------------------"))  # \n est un retour a la ligne
+    if  hold_tool <= ToolCount:     #Checks if the tool number is between 1 and tool count)
+        print(_(f"------------------\n Storing tool number {hold_tool}\n------------------"))  
     else:
         msg.info(_("------------------\nThe tool called in the G-code does not exist", "Oups"))
         sys.exit(1)  # Arrête le programme (stop code)
@@ -397,7 +385,7 @@ if do_i_have_prob == True: #regarde au debut du code si oui ou non la mesure doi
         #fin script probing
         #-----------------------------------------------------------
     else:
-        print(_("-------------------\n Tool {new_tool} already install \n--------------------"))    
+        (_(f"-------------------\n Tool {new_tool} already mesured \n--------------------"))     
 else:
     print(_("-------------------\n Tool measurement cancelled, no probe installed \n--------------------"))
 

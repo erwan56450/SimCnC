@@ -21,7 +21,6 @@ Y_speed_final = 2000              # Vitesse  y d'aproche finale pour ranger l'ou
 C_speed = 2000                    # vitesse de C "porte outils"
 
 # positions
-
 Y_approch = -230                    # position y de la broche avant de rentrer l'outil de la port outil
 Y_tool_clamp= -300                  # position y final de la broche dans un porte outil
 Z_position_clean = -120             # distance a la quel le z descent pour nettoyage du cone
@@ -65,11 +64,15 @@ moveX = True                        # ne pas changer (Do not change)
 moveY = True                        # ne pas changer (Do not change)
 
 
+#-----------------------------------------------------------
+# Assigns a name to each axis when using getposition.
+# "d.getPosition(CoordMode.Machine)" returns a machine position which, if the machine is at zero, will be: 0.0.0.0.0.0
+# These lines of code are used to name each digit returned in the format X.Y.Z.A.B.C, where the first zero at position 0 is named X, the second zero at position 1 is named Y, etc.
+# If your tool changer/holder is on the Y-axis instead of X-axis like mine, you can either replace all the X's in the code m6.py with Y's, or here, name X=1 and Y=0 (a trick I haven't tested).
+#-----------------------------------------------------------
 
-
-X = 0  # donne un noms a l'axe quand getposition est utilisé
-Y = 1  # "d.getPosition(CoordMode.Machine)"  renvoie une posision machine qui si la machine est a zero sera: 0.0.0.0.0.0                             
-Z = 2  # ses lignes de code servent a nommer chaque chiffre retrounés de la sorte X.Y.Z.A.B.C, le premier zero qui est en position 0 est nomé X le 2eme qui est en position 1 est nomé Y ex..                              
-A = 3  # si votre chargeur d'outils est sur X et non Y comme moi, alors vous pouvez soit remplacer tous les Y dans le code m6.py par des X, soit ici nomer X=1 Y=0 (astuce que je n'ai pas testé)
-B = 4
+X = 0
+Y = 1
+Z = 2
+A = 3
 C = 5
