@@ -3,11 +3,13 @@
 # By using this code, you agree to assume all responsibility and risk associated with the use of the code.
 
 # Change tool script for SIMCNC & Csmio-s 
-# Erwan Le Foll 24/04/2022   version 1.1   https://youtube.com/@erwan3953
+# Erwan Le Foll 24/05/2022   version 1.2   https://youtube.com/@erwan3953
 
 # Script de changement d'outil automatique pour un chargeur d'outil avec TOURNIQUET
 # ici le moteur du tourniquet est sur l'axe C en degrés (ou Lineair mm.) pour les Axes en degré comfigurer> axes> C> RotaryType (1->360) permet de prendre le chemain le plus court
 
+# watch out! the tool sensor of this spindle needs to turn to verify that a tool is in place
+# https://www.usinages.com/threads/projet-de-retrofit-complet-dune-cnc-axyz.162287/
 
 from ConfigMachine import * #Import le fichier ConfigMachine.py qui doit ce trouver dans le meme répertoir que m6.py (#Import the ConfigMachine.py file which must be in the same directory as m6.py)
 import time   # importe le temps pour la fonction time.sleep (import time for the function time.sleep)
@@ -121,7 +123,7 @@ d.moveToPosition(CoordMode.Machine, position, Z_speed_up)
 d.executeGCode( "M3 S5000" )
 time.sleep(1)
 d.setSpindleState( SpindleState.OFF )
-time.sleep(0.5)
+time.sleep(2)
 
 mod_IP = d.getModule(ModuleType.IP, 0)
 if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.PinReset:
@@ -228,7 +230,7 @@ if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool execute les
     d.executeGCode( "M3 S5000" )
     time.sleep(1)
     d.setSpindleState( SpindleState.OFF )
-    time.sleep(0.5)
+    time.sleep(2)
     
     #verifi qu'il n'y a pas ou plus d'outils dans la broche
     Read_if_tool_out (check_tool_in_spindel)  
@@ -294,7 +296,7 @@ if hold_tool != new_tool:  #si hold_tool n'est pas egale a hold_tool execute les
     d.executeGCode( "M3 S5000" )
     time.sleep(1)
     d.setSpindleState( SpindleState.OFF )
-    time.sleep(0.5)
+    time.sleep(2)
 
     #Verifit si outil dans la broche
     Read_if_tool_in (check_tool_in_spindel)

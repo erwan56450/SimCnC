@@ -2,13 +2,10 @@
 # The author shall not be held responsible for any injury, damage, or loss resulting from the use of this code.
 # By using this code, you agree to assume all responsibility and risk associated with the use of the code.
 
-# Code python pour changer d'outil sur fraise ATC automatiqueement et le mesurer si sa valeur dans la table d'outils est = 0
-# (Python code to automatically change the tool on an ATC router and measure it if its value in the tool table is = 0 )
 
-# Change tool script for SIMCNC & Csmio-s 
-# Erwan Le Foll 23/04/2022    https://youtube.com/@erwan3953
+# LOAD 3D prob for ATC spindel & move to G54 
+# Erwan Le Foll 23/05/2022    https://youtube.com/@erwan3953
 
-# Le Homming de ce code ce fait en haut a droit de votre table au valeur home=Y0,X0,Z0. La zone de travail est donc en valeurs negatives.(peux ce modifier)
 # (The homing in this code is done in the top right of your table with home values = Y0, X0, Z0. The working area is therefore in negative values. (can be modified)
 
 from ConfigMachine import * #Import le fichier ConfigMachine.py qui doit ce trouver dans le meme répertoir que m6.py (#Import the ConfigMachine.py file which must be in the same directory as m6.py)
@@ -306,13 +303,18 @@ if wake_up_prob == True:
     #Petit démarage de broche pour reveiller le 3dprob (https://vers.ge/en/)
     print(_("-------------------\n WAKE UP 3D PROB \n--------------------"))
     d.executeGCode( "M3 S3000" )
-    time.sleep(wake_up_time)
     d.setSpindleState( SpindleState.OFF )
-    time.sleep(wake_up_time)
+    time.sleep(time_spindel_stop_prob)
+    
 
-# Récupérer la position .Program et la nome "position_prog" (Retrieve the Program position and name it "position_prog".)
-position_prog = d.getPosition(CoordMode.Program)
+# come back in soft limit zone
+position[Y] = Y_position_safe_zone
+d.moveToPosition(CoordMode.Machine, position, YX_speed)
 
+# Activate soft limits
+d.ignoreAllSoftLimits(False)
+
+print(_("-------------------\n Move to X0 Y0 program\n--------------------"))
 #moving to the Y=0 X=0 
 position[Y] = 0
 position[X] = 0

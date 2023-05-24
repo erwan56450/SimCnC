@@ -398,7 +398,7 @@ set_digital_output(valve_dustColect_under, DIOPinVal.PinSet)
 time.sleep(2)
 set_digital_output(valve_dustColect_under, DIOPinVal.PinReset)
 
-#active les soft limite
+# Activate soft limits
 d.ignoreAllSoftLimits(False)
 
 # Export les infos du nouvel outil dans simcnc (Export the new tool information to SimCNC.)

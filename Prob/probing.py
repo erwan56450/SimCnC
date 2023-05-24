@@ -1,3 +1,10 @@
+# Disclaimer: The provided code is open-source and free to use, modify, and distribute. 
+# The author shall not be held responsible for any injury, damage, or loss resulting from the use of this code.
+# By using this code, you agree to assume all responsibility and risk associated with the use of the code.
+
+# replace the probing.py of simcnc
+# this one importe configmachine.py  like that it use the same parameter in m6.py for mesuring
+
 
 import sys
 import time
