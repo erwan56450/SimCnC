@@ -1,3 +1,6 @@
+# I'm not using this code any more & i made some minor update
+# put all speed very slow for test, be ready to E-stop!!!!!
+
 # Disclaimer: The provided code is open-source and free to use, modify, and distribute. 
 # The author shall not be held responsible for any injury, damage, or loss resulting from the use of this code.
 # By using this code, you agree to assume all responsibility and risk associated with the use of the code.
@@ -18,6 +21,7 @@ import sys    # pour utiliser la fonction sys.exit() (to use the sys.exit() func
 #-----------------------------------------------------------
 # WORK IN PROGRESS
 # Importe le tradution du fichier multilingual.py a placer dans le meme répèretoir que M6
+# Don't delete those lines even if your not using theme or you will have to delete all the "(_" after all prints
 #-----------------------------------------------------------
 try:
     from multilingual import _
@@ -142,7 +146,7 @@ d.ignoreAllSoftLimits(True)
 
 if threeD_prob is not None and new_tool == threeD_prob:
     print("The tool called in the gcode cannot be the prob3D")
-    msg.info("The tool called in the gcode cannot be the prob3D" "g-code num err")
+    msg.info("The tool called in the gcode cannot be the prob3D")
     sys.exit(1)  # Arrête le programme (stop the program)
     
 #-----------------------------------------------------------
@@ -203,6 +207,7 @@ if hold_tool != new_tool and hold_tool != 0:
     time_spent = time.time() - start_time_stop_spin
     remaining_time = time_spindle_stop - time_spent
     if remaining_time > 0: 
+        print(_(f"------------------\n {remaining_time} before next move, spindel still turning!!!\n------------------"))
         time.sleep(remaining_time)
 
     # Déplacer l'axe Z approche rapide  (Move the Z axis fast approach)
@@ -243,7 +248,8 @@ if hold_tool != new_tool: #ignore le code si holdtool= newtool (skip code if hol
     # Pause pour l'ouverture de la pince (Pause for clamp opening)
     time.sleep (0.5)
 
-    # Si le debut du script a été passé a cause d'un outil Zero alors  replace Y ( If the start of the script was skipped because of a Zero tool then replace Y)
+    # If the start of the script was skipped because of a Zero tool then replace Y
+    # Sinon ne bouge pas car vous ete deja a cette emplacement
     position[Y] = Y_position_first_tool
     d.moveToPosition(CoordMode.Machine, position, YX_speed)
 

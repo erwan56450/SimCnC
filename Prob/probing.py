@@ -65,7 +65,11 @@ if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.
 #-----------------------------------------------------------
 
 print(_(f"------------------\n Tool {current_tool} Launching the measurement process .\n------------------"))
-    
+
+# Up Z
+position[Z] = 0
+d.moveToPosition(CoordMode.Machine, position, YX_speed)
+
 # deplacement en XY safe zone , evite les colision avec les outils rangés
 position[X] = probeStartAbsPos['X_probe']
 position[Y] = Y_position_safe_zone
@@ -127,10 +131,10 @@ position[Axis.Z.value] = 0
 d.moveToPosition(CoordMode.Machine, position, Z_up_speed)
 
 # imprime dans la console le décalage de l'outil new tool
-print(_("décalage d'outil({:d}) : {:.4f}".format(current_tool, new_tool_length)))
+print(_("tool Z offset({:d}) : {:.4f}".format(current_tool, new_tool_length)))
 
 # retour dans la zone de soft limite 
-position[Y] = Y_position_safe_zone
+position[Y] = 0
 d.moveToPosition(CoordMode.Machine, position, YX_speed)
 
 #-----------------------------------------------------------

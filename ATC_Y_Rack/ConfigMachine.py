@@ -31,7 +31,7 @@ X_position_safe_zone = 80           # zone where tools can move on the Y axis wi
 X_position_first_tool = 90          # position of the first tool
 Z_position_tools = -110             # location where the tool is released
 Z_position_approach = -80           # location where it is necessary to start slowing down and trigger the air conne cleaner
-X_distance_between_tools = -100     # distance between each tool holders
+X_distance_between_tools = -100     # distance between each tool holders ( minus = seconde tool on left)
 
 # input/output csmio number (instead a number, with " Bone " and it will be ignore)
 check_tool_in_spindel = 24          # Digital input number managing the tool detection sensor
