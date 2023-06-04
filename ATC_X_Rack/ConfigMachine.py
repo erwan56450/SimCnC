@@ -15,7 +15,7 @@
 # INfos sur la machine (Machine informations)
 #-----------------------------------------------------------
 
-
+#test
 # infos
 ToolCount = 23                    # Nombre max. d'outils sur la table premier outil =1 (Maximum number of tools on the table, first tool=1)
 
