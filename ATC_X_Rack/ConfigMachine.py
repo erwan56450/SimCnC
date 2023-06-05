@@ -41,7 +41,7 @@ valve_collet = 13                   # Digital output number managing the valve f
 valve_clean_cone = 14               # Digital output number managing the valve for tool holder cone cleaning.
 valve_dustColect_out = 9            # Remove dust shoe
 valve_dustColect_under = 11         # put the dust shoe ready to suck
-valve_blower = 12                   # Digital output number managing the valve for the blower
+valve_prob_blower = None                 # Digital output number managing the valve for the blower
 
 # time
 blowing_time = 0.5                  # Time in seconds of the blower at the tool drop or measurement.

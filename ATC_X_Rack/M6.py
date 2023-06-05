@@ -199,11 +199,6 @@ if hold_tool != new_tool and hold_tool != 0:
     position[Y] = Y_position_backplate_pass
     d.moveToPosition(CoordMode.Machine, position, YX_speed)
 
-    # a quick blow of compressed air
-    set_digital_output(valve_blower, DIOPinVal.PinSet)
-    time.sleep (blowing_time) #see timing in configemachine.py
-    set_digital_output(valve_blower, DIOPinVal.PinReset)
-
     # Move Final Z
     position[Z] = Z_position_tools
     d.moveToPosition(CoordMode.Machine, position, Z_down_fast_speed)
@@ -290,42 +285,39 @@ if hold_tool != new_tool: # skip code if holdtool = newtool
     Read_if_tool_in (check_tool_in_spindel)
     Read_if_tool_in (check_clamp_status)
 
-
-
     # tells simcnc that the new tool is in place (why here againe? in case of emergecy stop)
     d.setToolLength (new_tool,new_tool_length)
     d.setToolOffsetNumber(new_tool)
     d.setSpindleToolNumber(new_tool)
 
-    #get out from the rack but not to far cose the back plate of the spindel
+    # get out from the rack but not to far cose the back plate of the spindel
     position[Y] = Y_position_backplate_pass
     d.moveToPosition(CoordMode.Machine, position, ZY_final_speed)
     
-    # remonte Le Z a zero apres la prise d'outil (raise the Z to zero after tool pickup.)
+    # Raise the Z to zero after tool pickup.
     position[Z] = 0
     d.moveToPosition(CoordMode.Machine, position, Z_up_speed)
 
-    # Déplacer l'axes Y en zone sur pour ne pas taper les autres outils (Move the Y axis to a safe zone to avoid hitting other tools.)
+    # Move the Y axis to a safe zone to avoid hitting other tools.
     position[Y] = Y_position_safe_zone
     d.moveToPosition(CoordMode.Machine, position, YX_speed)
 
     print(_("-------------------\n End of tool change \n--------------------"))
 
     #-----------------------------------------------------------
-    #fin des mouvements de changement d'outils (End of tool change movements)
+    # End of tool change movements
     #-----------------------------------------------------------
 else:
     print(_(f"-------------------\n The tool {new_tool} is already in place \n--------------------"))
 
 #-----------------------------------------------------------
-# Debut script de mesure ,basé sur l'original de simcnc (Beginning of the measurement script, based on the original from SimCNC)
+# Beginning of the measurement script, based on the original from SimCNC
 #-----------------------------------------------------------
 
-if do_i_have_prob == True: #regarde au debut du code si oui ou non la mesure doit etre lancée (Check at the beginning of the code whether or not the measurement should be launched.)
+if do_i_have_prob == True: # Check at the beginning of the code whether or not the measurement should be launched.
    
    
-   # Vérifit si la longueur de l'outil new_tool dans simCNC est 0 (non mesurée) si O execute le code de mesure
-   # Verifying if the length of the new_tool in simCNC is 0 (not measured). If it is, execute the measurement code."
+      # Verifying if the length of the new_tool in simCNC is 0 (not measured). If it is, execute the measurement code."
     if new_tool_length == 0  or  every_time_get_measure == True :  
         print(_(f"Tool {new_tool} Launching the measurement process ."))
             
@@ -342,27 +334,22 @@ if do_i_have_prob == True: #regarde au debut du code si oui ou non la mesure doi
         position[Axis.Z.value] = probeStartAbsPos['Z_probe']
         d.moveToPosition(CoordMode.Machine, position, Z_down_fast_speed)
 
-        # un petit coup de soufflette (a quick blow of compressed air) 
-        set_digital_output(valve_blower, DIOPinVal.PinSet)
-        time.sleep (blowing_time) #temps du soufflage
-        set_digital_output(valve_blower, DIOPinVal.PinReset)
-
-        # début de la mesure rapide  (fast prob)
+        #  fast prob)
         position[Axis.Z.value] = zEndPosition
         probeResult = d.executeProbing(CoordMode.Machine, position, probeIndex, fastProbeVel)
         if(probeResult == False):
             sys.exit(_("fast probing failed!"))
 
-        # recupère la mesure rapide (save the result fast prob)
+        #  save the result fast prob)
         fastProbeFinishPos = d.getProbingPosition(CoordMode.Machine)
 
-        # remonté de Z entre les 2 mesures (Z up for 2 mesur)
+        #  Z up for 2 mesur)
         d.moveAxisIncremental(Axis.Z, goUpDist, Z_up_speed)
 
         # pause entre les deux mesures
         time.sleep(fineProbingDelay)
 
-        # debut de la mesure lente (slow prob)
+        #  slow prob)
         probeResult = d.executeProbing(CoordMode.Machine, position, probeIndex, slowProbeVel)
         if(probeResult == False):
             sys.exit(_("slow probing failed!"))
@@ -377,29 +364,29 @@ if do_i_have_prob == True: #regarde au debut du code si oui ou non la mesure doi
             errMsg = "ERROR: dif entre les deux mesures trop grande (diff: {:.3f})".format(probeDiff)
             sys.exit( errMsg)
 
-        # calcule le décalage de l'outil (calculate  tool length)
+        #  Calculate  tool length)
         new_tool_length = probeFinishPos[Axis.Z.value] - refToolProbePos
 
         # remonté du Z a O  
         position[Axis.Z.value] = 0
         d.moveToPosition(CoordMode.Machine, position, Z_up_speed)
 
-        # imprime dans la console le décalage de l'outil new tool  (print in chat the result)
+        #  print in chat the result
         print(_("décalage d'outil({:d}) : {:.4f}".format(new_tool, new_tool_length)))
 
         #-----------------------------------------------------------
-        #fin script probing
+        # fin script probing
         #-----------------------------------------------------------
     else:
         (_(f"-------------------\n Tool {new_tool} already mesured \n--------------------"))     
 else:
     print(_("-------------------\n Tool measurement cancelled, no probe installed \n--------------------"))
 
-#rentre dans la zone soft limite (come back in soft limit zone )
+# come back in soft limit zone  
 position[Y] = 0
 d.moveToPosition(CoordMode.Machine, position, YX_speed)
 
-#Dust shoe back in place
+# Dust shoe back in place
 set_digital_output(valve_dustColect_under, DIOPinVal.PinSet)   
 time.sleep(2)
 set_digital_output(valve_dustColect_under, DIOPinVal.PinReset)
@@ -407,7 +394,7 @@ set_digital_output(valve_dustColect_under, DIOPinVal.PinReset)
 # Activate soft limits
 d.ignoreAllSoftLimits(False)
 
-# Export les infos du nouvel outil dans simcnc (Export the new tool information to SimCNC.)
+#  Export the new tool information to SimCNC. 
 d.setToolLength (new_tool,new_tool_length)
 d.setToolOffsetNumber(new_tool)
 d.setSpindleToolNumber(new_tool)
