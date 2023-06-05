@@ -2,14 +2,14 @@
 # The author shall not be held responsible for any injury, damage, or loss resulting from the use of this code.
 # By using this code, you agree to assume all responsibility and risk associated with the use of the code.
 
-# Code python pour changer d'outil sur fraise ATC automatiqueement et le mesurer si sa valeur dans la table d'outils est = 0
-# (Python code to automatically change the tool on an ATC router and measure it if its value in the tool table is = 0 )
+
+# Python code to automatically change the tool on an ATC router and measure it if its value in the tool table is = 0
 
 # Change tool script for SIMCNC & Csmio-s 
 # Erwan Le Foll 23/04/2022    https://youtube.com/@erwan3953
 
-# Le Homming de ce code ce fait en haut a droit de votre table au valeur home=Y0,X0,Z0. La zone de travail est donc en valeurs negatives.(peux ce modifier)
-# (The homing in this code is done in the top right of your table with home values = Y0, X0, Z0. The working area is therefore in negative values. (can be modified)
+# The homing in this code is done in the top right of your table with home values = Y0, X0, Z0. The working area is therefore in negative values. 
+# The tool are place on the table wise the Z axis 
 
 #-----------------------------------------------------------
 # INfos sur la machine (Machine informations)
@@ -19,10 +19,10 @@
 ToolCount = 11                      # Nombre max. d'outils sur la table premier outil =1 (Maximum number of tools on the table, first tool=1)
 
 # vitesses (speed)
-Z_down_final_speed = 2000           # Vitesse de Z d'aproche finale lente (slow final approach speed of Z)
-Z_down_fast_speed = 5000            # vitesse de Z d'aproche rapide (fast approach speed of Z)
-Z_up_speed = 10000                  # viteese de lever du Z (speed to lift Z)
-YX_speed = 50000                    # Vitesse de l'axe Y et X (speed of Y and X axis)
+Z_down_final_speed = 200          # Vitesse de Z d'aproche finale lente (slow final approach speed of Z)
+Z_down_fast_speed = 200          # vitesse de Z d'aproche rapide (fast approach speed of Z)
+Z_up_speed = 200                 # viteese de lever du Z (speed to lift Z)
+YX_speed = 200                   # Vitesse de l'axe Y et X (speed of Y and X axis)
 
 # positions
 Y_position_first_tool = -60        # Y position of the first tool hole.

@@ -6,12 +6,6 @@
 # So, every time you replace the end mill, you can click on this button.
 
 
-# code a lier a un nouveau bouton dans simcnc pour remise a zero des compensation d'outil de 1 a 100
-# Utilie si vous utiliser un de mes code ATC avec l'option "every_time_get_measure = false 
-# car si l'outil a deja été mesuré, il ne le sera plus. 
-# Donc a chaques remplacement de fraises je vous pourez cliquer sur ce bouton.
-
-
 import tkinter as tk
 
 def reset_tool_length():

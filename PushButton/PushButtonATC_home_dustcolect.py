@@ -1,12 +1,9 @@
-# Bouton pour simcnc, 
-# actione la valve N9 pour déplacer le colecteur de poussière avant de faire un homing.
+# I use this code on the 'reference all axise' in sim cnc, 
 
-# Récupérer la position de la machine et la nome "position" (Retrieve the machine's position and name it "position".)
-
+# first it release my dust shoe
+# sec execute homming
 
 import time
-
-
 
 
 mod_IP = d.getModule(ModuleType.IP, 0) # pour cismo ipS

@@ -3,7 +3,7 @@
 # By using this code, you agree to assume all responsibility and risk associated with the use of the code.
 
 # replace the probing.py of simcnc
-# this one importe configmachine.py  like that it use the same parameter in m6.py for mesuring
+# this one importe the configmachine.py  like that it use the same parameter in m6.py & in probing.py
 
 
 import sys

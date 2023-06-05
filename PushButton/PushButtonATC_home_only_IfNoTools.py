@@ -1,19 +1,21 @@
-# Code a lier avec un bouton home dans simcnc 
-# Verifit qu'il n'y a pas d'outil dans la broche avant de faire un homing.
-# tester le code dans la console script
-# Ouvrir l'editeur d'interface Simcnc > Configuration > openGUIeditor > selectionner le bouton par defaut du homing qui va etre rempalcer.
-# dans le fenetre GUI editor (une fois le bouton home selectioné) en bas a droite cliquer sur "OUPUT: clicked > "ref all Axes"  remplacer par "RUN SCRIPT" et selectioner HomingPerso.py ")
-# Le script doit etre sauvegardé la ou "Run script" a ouvert la fenetre.
+# Code to link with a home button in simcnc
+# Check that there is no tool in the spindle before doing a homing.
 
-check_tool_in_spindel = 24 # Numero de l'entrée a vérifier si "off" avant le homing # None =ignoré
+# Open the Simcnc interface editor > Configuration > openGUIeditor > select the default button of the homing that will be replaced.
+# in the GUI editor window (once the home button has been selected) at the bottom right click on "OUPUT: clicked > "ref all Axes" replace with "RUN SCRIPT" and select HomingPerso.py ")
+# The script must be saved where "Run script" opened the window.
+
+check_tool_in_spindel = 24 # Set the corect number of spindel tool sensor
 
 import time
 
-# Sur cette machine la broche doit tourner quelques tour pour que le capteur fonctionne correcement 
+# On this machine the spindle must turn a few turns for the sensor to work correctly (delet this 4 line if no need)
 d.executeGCode( "M3 S5000" )
-time.sleep(1)
-d.setSpindleState( SpindleState.OFF )
 time.sleep(0.5)
+d.setSpindleState( SpindleState.OFF )
+time.sleep(3)
+# end start spindel
+
 
 if check_tool_in_spindel is not None: # Vérifie si l'entrée n'est pas configurée sur None
     mod_IP = d.getModule(ModuleType.IP, 0) # Appelle le module CSMIO IP-S

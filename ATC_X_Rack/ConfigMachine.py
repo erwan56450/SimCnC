@@ -8,8 +8,8 @@
 # Change tool script for SIMCNC & Csmio-s 
 # Erwan Le Foll 23/04/2022    https://youtube.com/@erwan3953
 
-# Le Homming de ce code ce fait en haut a droit de votre table au valeur home=Y0,X0,Z0. La zone de travail est donc en valeurs negatives.(peux ce modifier)
-# (The homing in this code is done in the top right of your table with home values = Y0, X0, Z0. The working area is therefore in negative values. (can be modified)
+# The homing in this code is done in the top right of your table with home values = Y0, X0, Z0. The working area is therefore in negative values. (can be modified)
+# The tool are place in the rack wise the Y axis 
 
 #-----------------------------------------------------------
 # INfos sur la machine (Machine informations)

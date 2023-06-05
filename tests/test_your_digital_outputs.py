@@ -1,16 +1,16 @@
-# Tester vos sorties numeriques sans vous fatiguer
-# Test your digital outputs without getting tired
+
+# Test your digital outputs without quickly
 
 #######################################################################
-# Définissez le numéro de sortie numérique ici . None = pas configuré
-valve_collet = 13               # cone porte outils
-valve_dustColect_under = 11     # déplacement du récupérateur de poussières sous la broche
-valve_dustColect_out = 9       # déplacement du récupérateur de poussières  a coté de la broche
-valve_clean_cone = 14           # Nettoyage du cone
-valve_nozel = 12                # Soufflette
+#Set the digital output number here. None = not configured
+valve_collet = 13               # valve for changing tool 
+valve_dustColect_under = 11     # move dust colector 
+valve_dustColect_out = 9        # move dust colector 
+valve_clean_cone = 14           # clean spindel cone
+valve_nozel = 12                # blower
 valve_dor = None                # ouverture trappe outils/tourniquet
-dust_collection = None          # démarrage de l'aspiration
-vacum_pump = None               # pompe a vide /table a déprésion
+dust_collection = None          # start vacum
+vacum_pump = None               # start vacum table
 #######################################################################
 
 import sys
