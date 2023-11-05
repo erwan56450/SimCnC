@@ -2,6 +2,7 @@
 # Disclaimer: The provided code is open-source and free to use, modify, and distribute. 
 # The author shall not be held responsible for any injury, damage, or loss resulting from the use of this code.
 # By using this code, you agree to assume all responsibility and risk associated with the use of the code.
+# Be careful anyway, this is not a safe way to change a tool, because the machine  is still "enable"
 
 # If like me you have bought a Simcnc card but your change tool rack is not ready , you will need to change the tool manually.
 # Replace the M6.py in the simcnc folder by thise one.
@@ -15,7 +16,7 @@ Z_pos_chang_tool = 0
 # speed of move to reach the above position
 speed = 4000
 
-# moving commande call by Move_to_change_tool_pos() in the macro
+# moving commande, call by Move_to_change_tool_pos() in the macro
 def Move_to_change_tool_pos():
     # move Z 
     position[Z] = Z_pos_chang_tool

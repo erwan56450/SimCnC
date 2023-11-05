@@ -6,10 +6,16 @@
 # So, every time you replace the end mill, you can click on this button.
 
 
+# code a lier a un nouveau bouton dans simcnc pour remise a zero des compensation d'outil de 1 a 100
+# Utilie si vous utiliser un de mes code ATC avec l'option "every_time_get_measure = false 
+# car si l'outil a deja été mesuré, il ne le sera plus. 
+# Donc a chaques remplacement de fraises je vous pourez cliquer sur ce bouton.
+
+
 import tkinter as tk
 
 def reset_tool_length():
-    for tool_table in range(1, 100): #reset les tailles d'outils de 1 a 100
+    for tool_table in range(1, 100):
         n_tool = tool_table
         current_tool_length = d.getToolLength(n_tool)
 
@@ -17,7 +23,7 @@ def reset_tool_length():
             d.setToolLength(n_tool, 0)
             print(f"The measurement of tool {n_tool} has been reset.")
         
-    print(" All tool measurements have been reset.")
+    print("All tool measurements have been reset.")
     root.destroy()
 
 def cancel_reset():
@@ -25,12 +31,16 @@ def cancel_reset():
 
 root = tk.Tk()
 root.title("Reset Tool Length")
+
+# Forcer la fenêtre à rester au premier plan
+root.wm_attributes("-topmost", 1)
+
 message = "Are you sure you want to reset all tool lengths?"
-label = tk.Label(root, text=message)
-label.pack(pady=20)
+label = tk.Label(root, text=message, padx=30, pady=30)  # Ajout de la marge autour du texte
+label.pack()
 
 button_frame = tk.Frame(root)
-button_frame.pack()
+button_frame.pack(pady=30)  # Ajout de la marge sous le bouton
 
 ok_button = tk.Button(button_frame, text="Reset All", command=reset_tool_length)
 ok_button.pack(side=tk.LEFT, padx=10)

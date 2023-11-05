@@ -8,14 +8,14 @@
 # Change tool script for SIMCNC & Csmio-s 
 # Erwan Le Foll 23/04/2022    https://youtube.com/@erwan3953
 
-# The homing in this code is done in the top right of your table with home values = Y0, X0, Z0. The working area is therefore in negative values. (can be modified)
-# The tool are place in the rack wise the Y axis 
+# In my configuration, the homing is done at X0Y0Z0 at the top right of the machine, the 23 tools are on the X axis in the Y+ area
+# The working area is in Y- which allows the tools to be protected by the SoftLimit Zone
 
 #-----------------------------------------------------------
 # INfos sur la machine (Machine informations)
 #-----------------------------------------------------------
 
-#test
+
 # infos
 ToolCount = 23                    # Nombre max. d'outils sur la table premier outil =1 (Maximum number of tools on the table, first tool=1)
 
@@ -23,12 +23,12 @@ ToolCount = 23                    # Nombre max. d'outils sur la table premier ou
 ZY_final_speed = 1000              # slow final approach speed of Y or Z)
 Z_down_fast_speed = 2000           # vitesse de Z d'aproche rapide (fast approach speed of Z)
 Z_up_speed = 4000                 # viteese de lever du Z (speed to lift Z)
-YX_speed = 10000                    # Vitesse de l'axe Y et X (speed of Y and X axis)
+YX_speed = 20000                    # Vitesse de l'axe Y et X (speed of Y and X axis)
 
 # positions
-Y_position_backplate_pass = 132    # Y position ou la plaque de fixation de la broche peux desendre derrière les outils 
-Y_position_first_tool = 186.5      # Y position of the first tool hole.
-Y_position_safe_zone = 105         # Y zone where tools can move on the X axis without touching each other tools stored
+Y_position_backplate_pass = 142    # Y position ou la plaque de fixation de la broche peux desendre derrière les outils 
+Y_position_first_tool = 193.5      # Y position of the first tool hole.
+Y_position_safe_zone = 115         # Y zone where tools can move on the X axis without touching each other tools stored
 X_position_first_tool = -230.2     # X position of the first tool
 Z_position_tools = -94             # Z location where the tool is released
 Z_position_approach = -79          # Z location where it is necessary to start slowing down and trigger the air conne cleaner
@@ -41,7 +41,7 @@ valve_collet = 13                   # Digital output number managing the valve f
 valve_clean_cone = 14               # Digital output number managing the valve for tool holder cone cleaning.
 valve_dustColect_out = 9            # Remove dust shoe
 valve_dustColect_under = 11         # put the dust shoe ready to suck
-valve_prob_blower = None                 # Digital output number managing the valve for the blower
+valve_blower = None                 #12  # Digital output number managing the valve for the blower
 
 # time
 blowing_time = 0.5                  # Time in seconds of the blower at the tool drop or measurement.
@@ -52,8 +52,8 @@ time_spindle_stop = 15              # WARNING If to short you can destroy your s
 #-----------------------------------------------------------
 
 do_i_have_prob = True               # True = mesure d'outil activée. False = mesure d'outil desactivée ( True = tool measurement enabled. False = tool measurement disabled)
-every_time_get_measure = True       # True = mesure a tous les coups, False = mesure que si la table d'outil est a zero (True = measure every time, False = measure only if tool table is at zero)
-probeStartAbsPos = {'X_probe': -17, 'Y_probe': 191, 'Z_probe': -11} # Coordonnées de placement au dessus du prob [X_probe, Y_probe, Z_probe] votre outil le plus long doit passer avec ce Z! (Placement coordinates above the probe [X_probe, Y_probe, Z_probe] Your longest tool must pass with this Z!)
+every_time_get_measure = False       # True = mesure a tous les coups, False = mesure que si la table d'outil est a zero (True = measure every time, False = measure only if tool table is at zero)
+probeStartAbsPos = {'X_probe': -42, 'Y_probe': -26, 'Z_probe': -11} # Coordonnées de placement au dessus du prob [X_probe, Y_probe, Z_probe] votre outil le plus long doit passer avec ce Z! (Placement coordinates above the probe [X_probe, Y_probe, Z_probe] Your longest tool must pass with this Z!)
 probeIndex = 0                      # correspond a l'entrée que vous avez configuré dans les settings de simcnc (settings->Modules->IO Signals  : 0,1,2 ou 3 possible) (corresponds to the input you configured in the simcnc settings)
 zEndPosition = -190                 # l'axe z ne descendra pas plus loint! (The Z-axis will not go down any further!)
 refToolProbePos = -143.67           # Hauteur a la quelle votre outil de reférénce touche le prob, (si votre outil de référence touche a Z-100mm et que vous indiquez - 100mm ici, alors le décalage enregistré sera de 0mm) (Height at which your reference tool touches the probe (if your reference tool touches at Z-100mm and you indicate - 100mm here, then it will be referenced to 0mm))
@@ -78,7 +78,8 @@ wake_up_speed = 3000                # RPM, My spindel dosen't start under.
 time_spindel_stop_prob = 5          # Time to stop the spindel withe the prob a RPM on ligne above
 threeD_fastProbeVel = 700           # vitesse de la premiere mesure, rapide (units/min) (Speed of the first, fast measurement (units/min))
 threeD_slowProbeVel = 250           # vitesse du deuxieme mesure, lente (units/min) (Speed of the second, slow measurement (units/min))
-threeD_retract = 5
+threeD_retract = 5                  # retract between 2 mesures
+threeD_prob_ball_diameter = 2       # size of the 3d prob bal diameter
 
 #-----------------------------------------------------------
 # Assigns a name to each axis when using getposition.
