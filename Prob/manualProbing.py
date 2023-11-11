@@ -3,6 +3,7 @@
 # By using this code, you agree to assume all responsibility and risk associated with the use of the code.
 
 # author Erwan Le Foll 11/11/2023
+# created for dylan https://en.cs-lab.eu/forum/topic/help-with-a-tool-length-macro/
 
 # replace the probing.py of simcnc
 
