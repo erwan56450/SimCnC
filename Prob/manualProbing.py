@@ -2,9 +2,13 @@
 # The author shall not be held responsible for any injury, damage, or loss resulting from the use of this code.
 # By using this code, you agree to assume all responsibility and risk associated with the use of the code.
 
+# author Erwan Le Foll 11/11/2023
+
 # replace the probing.py of simcnc
+
+
 import sys
-# Get the tool number on the spindle and name it "hold_tool".
+# Get the tool number
 current_tool = d.getSpindleToolNumber()  
 
 # Retrieve the machine's position and name it "position".
@@ -12,11 +16,11 @@ position = d.getPosition(CoordMode.Machine)
 
 
 #MODIFY HERE WHAT NEEDED
-probeIndex = 0  #see in simcnc what numeber is your prob
-speed_down = 400
-speed_up = 500
+probeIndex = 0  #see in simcnc what number is your prob 0 1 2 or 3
+speed_down = 200
+speed_up = 800
 refToolProbePos = -100   #Height at which your reference tool touches the probe (if your reference tool touches at Z-100mm and you indicate - 100mm here, then it will be referenced to 0mm)
-go_down = 3  # go down for 3mm
+go_down = 3  # go down for 3mm , if no prob touch during those 3 mm dissent it stop moving
 
 #-----------------------------------------------------------
 # Start moving
