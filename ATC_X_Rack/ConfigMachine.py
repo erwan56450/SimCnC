@@ -6,7 +6,7 @@
 # (Python code to automatically change the tool on an ATC router and measure it if its value in the tool table is = 0 )
 
 # Change tool script for SIMCNC & Csmio-s 
-# Erwan Le Foll 23/04/2022    https://youtube.com/@erwan3953
+# Erwan Le Foll 26/11/2023   https://youtube.com/@erwan3953
 
 # In my configuration, the homing is done at X0Y0Z0 at the top right of the machine, the 23 tools are on the X axis in the Y+ area
 # The working area is in Y- which allows the tools to be protected by the SoftLimit Zone
@@ -26,12 +26,11 @@ Z_up_speed = 4000                 # viteese de lever du Z (speed to lift Z)
 YX_speed = 20000                    # Vitesse de l'axe Y et X (speed of Y and X axis)
 
 # positions
-Y_position_backplate_pass = 142    # Y position ou la plaque de fixation de la broche peux desendre derrière les outils 
-Y_position_first_tool = 193.5      # Y position of the first tool hole.
-Y_position_safe_zone = 115         # Y zone where tools can move on the X axis without touching each other tools stored
-X_position_first_tool = -230.2     # X position of the first tool
-Z_position_tools = -94             # Z location where the tool is released
-Z_position_approach = -79          # Z location where it is necessary to start slowing down and trigger the air conne cleaner
+Y_position_first_tool = -14        # Y position where the first tool is stored.
+Y_position_safe_zone = -100        # Y zone where tools can move on the X axis without touching each other tools stored
+X_position_first_tool = -206    # X position of the first tool
+Z_position_tools = -153.3          # Z location where the tool is stored
+Z_position_approach = -135         # Z location where it is necessary to start slowing down and trigger the air conne cleaner
 X_distance_between_tools = -76     # distance between each tool holders ( minus = seconde tool on left)
 
 # input/output csmio number (instead a number, with " Bone " and it will be ignore)
@@ -47,17 +46,22 @@ valve_blower = None                 #12  # Digital output number managing the va
 blowing_time = 0.5                  # Time in seconds of the blower at the tool drop or measurement.
 time_spindle_stop = 15              # WARNING If to short you can destroy your spindel Clamp. Time in seconds for the stop of your spindel with the >>>HEAVIEST<<< tool.
 
+# tool rack
+
+ToolRackUnder = 10
+ToolRackOut = 8
+
 #-----------------------------------------------------------
 # Infos sur le Contacteur de palpage (probing infos)
 #-----------------------------------------------------------
 
 do_i_have_prob = True               # True = mesure d'outil activée. False = mesure d'outil desactivée ( True = tool measurement enabled. False = tool measurement disabled)
 every_time_get_measure = False       # True = mesure a tous les coups, False = mesure que si la table d'outil est a zero (True = measure every time, False = measure only if tool table is at zero)
-probeStartAbsPos = {'X_probe': -42, 'Y_probe': -26, 'Z_probe': -11} # Coordonnées de placement au dessus du prob [X_probe, Y_probe, Z_probe] votre outil le plus long doit passer avec ce Z! (Placement coordinates above the probe [X_probe, Y_probe, Z_probe] Your longest tool must pass with this Z!)
+probeStartAbsPos = {'X_probe': -92, 'Y_probe': -36.5, 'Z_probe': -30} # Coordonnées de placement au dessus du prob [X_probe, Y_probe, Z_probe] votre outil le plus long doit passer avec ce Z! (Placement coordinates above the probe [X_probe, Y_probe, Z_probe] Your longest tool must pass with this Z!)
 probeIndex = 0                      # correspond a l'entrée que vous avez configuré dans les settings de simcnc (settings->Modules->IO Signals  : 0,1,2 ou 3 possible) (corresponds to the input you configured in the simcnc settings)
-zEndPosition = -190                 # l'axe z ne descendra pas plus loint! (The Z-axis will not go down any further!)
+zEndPosition = -210                 # l'axe z ne descendra pas plus loint! (The Z-axis will not go down any further!)
 refToolProbePos = -143.67           # Hauteur a la quelle votre outil de reférénce touche le prob, (si votre outil de référence touche a Z-100mm et que vous indiquez - 100mm ici, alors le décalage enregistré sera de 0mm) (Height at which your reference tool touches the probe (if your reference tool touches at Z-100mm and you indicate - 100mm here, then it will be referenced to 0mm))
-fastProbeVel = 700                  # Vitesse de la premiere mesure, rapide (units/min) (Speed of the first, fast measurement (units/min))
+fastProbeVel = 900                  # Vitesse de la premiere mesure, rapide (units/min) (Speed of the first, fast measurement (units/min))
 slowProbeVel = 250                  # Vitesse du deuxieme mesure, lente (units/min) (Speed of the second, slow measurement (units/min))
 goUpDist = 6                        # Remontée en mm de Z entre les deux mesures (Z-axis up travel in mm between the two measurements)
 fineProbingDelay = 0.2              # Temps en secondes entre les deux mesures (Time in seconds between the two measurements)

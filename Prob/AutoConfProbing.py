@@ -3,25 +3,16 @@
 # By using this code, you agree to assume all responsibility and risk associated with the use of the code.
 
 # replace the probing.py of simcnc
-# this one importe the configmachine.py  like that it use the same parameter in m6.py & in probing.py
+# TO WORK Correctly this code need to import the configmachine.py  like that it use the same parameter in m6.py & in probing.py
 
+# update 26/11/2023 add moving tool rack
 
 import sys
 import time
 from ConfigMachine import *
 
 
-#-----------------------------------------------------------
-# WORK IN PROGRESS
-# Importe le tradution du fichier multilingual.py a placer dans le meme répèretoir que M6
-#-----------------------------------------------------------
-try:
-    from multilingual import _
-except ModuleNotFoundError:
-    print("The multilingual.py file cannot be found. WORK IN PROGRESS.")
-    
-    def _(text):
-        return text
+
 #-----------------------------------------------------------
 # Fonction pour Activer n'importe quelle sorties numériques spécifiée exemple:
 # allumé=   set_digital_output(valve_collet, DIOPinVal.PinSet)   
@@ -36,27 +27,62 @@ def set_digital_output(output_number, value):
         mod_IP = d.getModule(ModuleType.IP, 0) # pour cismo ipS
         mod_IP.setDigitalIO(output_number, value)
     except NameError:
-        print(_("------------------\nThe digital output has not been well defined."))
-
-
-#recupère le numero d'outil sur la broche et le nome hold tool (Get the tool number on the spindle and name it "hold_tool".)
-current_tool = d.getSpindleToolNumber()  
-
-# Récupérer la position de la machine et la nome "position" (Retrieve the machine's position and name it "position".)
-position = d.getPosition(CoordMode.Machine)
-
-#supprimer les soft limite
-d.ignoreAllSoftLimits(True)
+        print(("------------------\nThe digital output has not been well defined."))
 
 #-----------------------------------------------------------
-#regarde si il y a un outil dans la broche, Si "non" indique dans Simcnc outil "Zero".
+# Function to activate air tool rack UNDER from spindel
+#-----------------------------------------------------------
+
+def tool_rack_under():
+    #Call ouput tool rack under
+    print("call tool rack under")
+    mod_IP.setDigitalIO(ToolRackUnder, DIOPinVal.PinSet)
+
+    time.sleep(2)#time for piston to expend
+
+
+#-----------------------------------------------------------
+# Function to activate air tool rack OUT from spindel
+#-----------------------------------------------------------
+
+def tool_rack_out():
+
+    #close the air out Valve of tool rack
+    mod_IP.setDigitalIO(ToolRackUnder, DIOPinVal.PinReset)
+    time.sleep(0.2)
+
+    #Call ouput  tool rack out
+    print("Start removing the tool holder")
+    mod_IP.setDigitalIO(ToolRackOut, DIOPinVal.PinSet)
+
+    time.sleep(2) #time for piston to expend
+
+    print("tool rack is out")
+    mod_IP.setDigitalIO(ToolRackOut, DIOPinVal.PinReset) #stop output 
+
+#stop spindel (just in case)
+d.setSpindleState(SpindleState.OFF) 
+
+
+#-----------------------------------------------------------
+# Ask the Csmio , and name the returned values with names.
+#-----------------------------------------------------------
+
+#Get the tool number on the spindle and name it "hold_tool".
+current_tool = d.getSpindleToolNumber()  
+
+# Retrieve the machine's position and name it "position".
+position = d.getPosition(CoordMode.Machine)
+
+#-----------------------------------------------------------
+#see if there is a tool in the spindle, If "no" indicates in Simcnc tool "Zero".
 #-----------------------------------------------------------
 
 mod_IP = d.getModule(ModuleType.IP, 0)
 
 if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.PinReset:
     d.setSpindleToolNumber("0")
-    print(_("------------------\nNO TOOL IN SPINDEL.\n------------------"))
+    print(("------------------\nNO TOOL IN SPINDEL.\n------------------"))
     msg.info("NO TOOL IN SPINDEL", "Info")  #error message
     sys.exit(1) # stop the programe
 
@@ -64,26 +90,25 @@ if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.
 #Start moving
 #-----------------------------------------------------------
 
-print(_(f"------------------\n Tool {current_tool} Launching the measurement process .\n------------------"))
+print((f"------------------\n Tool {current_tool} Launching the measurement process .\n------------------"))
 
 # Up Z
 position[Z] = 0
 d.moveToPosition(CoordMode.Machine, position, YX_speed)
 
-# deplacement en XY safe zone , evite les colision avec les outils rangés
+# displacement in XY above the prob
 position[X] = probeStartAbsPos['X_probe']
-position[Y] = Y_position_safe_zone
-d.moveToPosition(CoordMode.Machine, position, YX_speed)
-
-# deplacement Y au dessus du prob
 position[Y] = probeStartAbsPos['Y_probe']
 d.moveToPosition(CoordMode.Machine, position, YX_speed)
 
-# desente Z rapide, l'outil ne doit pas toucher le prob encore
+# Move air tool rack under the spindel
+tool_rack_under()
+
+# Z rapid descent, the tool must not touch the prob yet
 position[Axis.Z.value] = probeStartAbsPos['Z_probe']
 d.moveToPosition(CoordMode.Machine, position, Z_down_fast_speed)
 
-# un petit coup de soufflette (a quick blow of compressed air) 
+# a quick blow of compressed air (see machineconfig.py for number output)
 set_digital_output(valve_blower, DIOPinVal.PinSet)
 time.sleep (blowing_time) #temps du soufflage
 set_digital_output(valve_blower, DIOPinVal.PinReset)
@@ -92,57 +117,50 @@ set_digital_output(valve_blower, DIOPinVal.PinReset)
 position[Axis.Z.value] = zEndPosition
 probeResult = d.executeProbing(CoordMode.Machine, position, probeIndex, fastProbeVel)
 if(probeResult == False):
-    sys.exit(_("fast probing failed!"))
+    sys.exit(("fast probing failed!"))
 
-# recupère la mesure rapide
+# Retrieve the quick measurement.
 fastProbeFinishPos = d.getProbingPosition(CoordMode.Machine)
 
-# remonté de Z entre les 2 mesures
+# Raise Z between the two measurements.
 d.moveAxisIncremental(Axis.Z, goUpDist, Z_up_speed)
 
-# pause entre les deux mesures
+#Pause between the two measurements
 time.sleep(fineProbingDelay)
 
-# debut de la mesure lente
+# Start of the slow measurement
 probeResult = d.executeProbing(CoordMode.Machine, position, probeIndex, slowProbeVel)
 if(probeResult == False):
-    sys.exit(_("slow probing failed!"))
+    sys.exit(("slow probing failed!"))
 
-# récupère la mesure lente
+# Retrieve the slow measurement
 probeFinishPos = d.getProbingPosition(CoordMode.Machine)
 
-# regararde la différence entre les deux mesures (Look at the difference between the two measurements)
+# Look at the difference between the two measurements if to mutch difference error
 probeDiff = abs(fastProbeFinishPos[Axis.Z.value] - probeFinishPos[Axis.Z.value])
 print("Fast Probe (axe Z): {:.4f}, Fine Probe (axe Z): {:.4f}".format(fastProbeFinishPos[Axis.Z.value], probeFinishPos[Axis.Z.value]))
 if(probeDiff > fineProbeMaxAllowedDiff and checkFineProbingDiff == True):
-    errMsg = "ERROR: dif entre les deux mesures trop grande (diff: {:.3f})".format(probeDiff)
+    errMsg = "ERROR: Difference between the two measurements is too large (diff: {:.3f})".format(probeDiff)
     sys.exit( errMsg)
 
-# calcule le décalage de l'outil (calculate  tool length)
+# calculate  tool length
 new_tool_length = probeFinishPos[Axis.Z.value] - refToolProbePos
 
-# Export les infos du nouvel outil dans simcnc (Export the new tool information to SimCNC.)
+# Export the new tool information to SimCNC.)
 d.setToolLength (current_tool,new_tool_length)
 d.setToolOffsetNumber(current_tool)
 d.setSpindleToolNumber(current_tool)
 
-# remonté du Z a O
+#  up Z to O
 position[Axis.Z.value] = 0
 d.moveToPosition(CoordMode.Machine, position, Z_up_speed)
 
-# imprime dans la console le décalage de l'outil new tool
-print(_("tool Z offset({:d}) : {:.4f}".format(current_tool, new_tool_length)))
+#move tool rack out from spindel
+tool_rack_out()
 
-# retour dans la zone de soft limite 
-position[Y] = 0
-d.moveToPosition(CoordMode.Machine, position, YX_speed)
+# Print in the console the offset of the new tool
+print(("tool Z offset({:d}) : {:.4f}".format(current_tool, new_tool_length)))
 
 #-----------------------------------------------------------
 #fin script probing
 #-----------------------------------------------------------
-
-
-#active les soft limite
-d.ignoreAllSoftLimits(False)
-
-
