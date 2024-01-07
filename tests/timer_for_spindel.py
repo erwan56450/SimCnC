@@ -1,5 +1,5 @@
 import tkinter as tk
-print("start")  # message d'erreur
+print("start")  # print in consol
 initial_time_in_seconds = 3  # Configuration initiale en secondes
 
 class CountdownApp:
@@ -73,4 +73,4 @@ if __name__ == "__main__":
     app = CountdownApp(root)
     root.mainloop()
 
-print("end")  
+print("end")  #print end in consol
