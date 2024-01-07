@@ -129,10 +129,16 @@ def tool_rack_out():
 ############################################################
 
 #-----------------------------------------------------------
+#call simsmo ips
+#-----------------------------------------------------------
+        
+mod_IP = d.getModule(ModuleType.IP, 0)
+
+#-----------------------------------------------------------
 # Check if there is a tool in the spindle, If "no tool" indicates  tool zero in simcnc.
 #-----------------------------------------------------------
 
-mod_IP = d.getModule(ModuleType.IP, 0)
+
 if mod_IP.getDigitalIO(IOPortDir.InputPort, check_tool_in_spindel) == DIOPinVal.PinReset:
     d.setSpindleToolNumber("0")
     print("------------------\n NO TOOL IN SPINDEL.\n------------------")
@@ -244,8 +250,7 @@ if hold_tool != new_tool and hold_tool != 0:
 # LOADING NEW TOOL
 #-----------------------------------------------------------
 
-if hold_tool != new_tool: # skip code if holdtool = newtool
-
+if hold_tool != new_tool : # skip code if holdtool = newtool 
     if  new_tool <= ToolCount:
         # Check that the new tool does not exceed toolcount
         new_tool = (new_tool - 1) % ToolCount + 1   
@@ -332,11 +337,11 @@ else:
 # Beginning of the measurement script, based on the original from SimCNC
 #-----------------------------------------------------------
 
-if do_i_have_prob == True: # Check at the beginning of the code whether or not the measurement should be launched.
+if do_i_have_prob == True: # Check in config.py whether or not the measurement should be launched.
    
    
-      # Verifying if the length of the new_tool in simCNC is 0 (not measured). If it is, execute the measurement code."
-    if new_tool_length == 0  or  every_time_get_measure == True :  
+      # Verifying if the length of the new_tool in simCNC is 0 (not measured). If it is, execute the measurement code.  + if no tool load skip"
+    if new_tool_length == 0 or every_time_get_measure == True:
         print(f"Tool {new_tool} Launching the measurement process .")
             
         # deplacement en XY safe zone , evite les colision avec les outils rangés
@@ -375,17 +380,22 @@ if do_i_have_prob == True: # Check at the beginning of the code whether or not t
         # récupère la mesure lente (save the slow prob)
         probeFinishPos = d.getProbingPosition(CoordMode.Machine)
 
-        # regararde la différence entre les deux mesures (Look at the difference between the two measurements)
+        # Look at the difference between the two measurements)
         probeDiff = abs(fastProbeFinishPos[Axis.Z.value] - probeFinishPos[Axis.Z.value])
         print("Fast Probe (axe Z): {:.4f}, Fine Probe (axe Z): {:.4f}".format(fastProbeFinishPos[Axis.Z.value], probeFinishPos[Axis.Z.value]))
         if(probeDiff > fineProbeMaxAllowedDiff and checkFineProbingDiff == True):
             errMsg = "ERROR: dif entre les deux mesures trop grande (diff: {:.3f})".format(probeDiff)
             sys.exit( errMsg)
 
-        #  Calculate  tool length)
+        #  Calculate  tool length
         new_tool_length = probeFinishPos[Axis.Z.value] - refToolProbePos
 
-        # remonté du Z a O  
+        # tells simcnc new length (why here againe? in case of emergecy stop)
+        d.setToolLength (new_tool,new_tool_length)
+        d.setToolOffsetNumber(new_tool)
+        d.setSpindleToolNumber(new_tool)
+
+        # Z to O  
         position[Axis.Z.value] = 0
         d.moveToPosition(CoordMode.Machine, position, Z_up_speed)
 
@@ -393,7 +403,7 @@ if do_i_have_prob == True: # Check at the beginning of the code whether or not t
         print("décalage d'outil({:d}) : {:.4f}".format(new_tool, new_tool_length))
 
         #-----------------------------------------------------------
-        # fin script probing
+        # end script probing
         #-----------------------------------------------------------
     else:
         print(f"-------------------\n Tool {new_tool} already measured \n--------------------")    
@@ -401,10 +411,13 @@ else:
     print("-------------------\n Tool measurement cancelled, no probe installed \n--------------------")
 
 
-# call back the air tool rack
-tool_rack_out()
-
 #  Export the new tool information to SimCNC. 
 d.setToolLength (new_tool,new_tool_length)
 d.setToolOffsetNumber(new_tool)
 d.setSpindleToolNumber(new_tool)
+
+# call back the air tool rack
+tool_rack_out()
+
+#it seems that the script is stopped too quickly and that Simcnc does not take into account the last lines of code
+time.sleep(0.5) #time for srcipt to be crectly execute
