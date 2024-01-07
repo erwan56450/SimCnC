@@ -1,5 +1,5 @@
 import tkinter as tk
-print("start")  # Error message
+print("start")  # print start in debug window
 initial_time_in_seconds = 10  # Initial configuration in seconds
 
 class CountdownApp:
