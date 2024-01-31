@@ -7,10 +7,11 @@
 # If like me you have bought a Simcnc card but your change tool rack is not ready , you will need to change the tool manually.
 # Replace the M6.py in the simcnc folder by thise one.
 # To use the measure button you have to configure your probing.py correctly
+# https://www.youtube.com/watch?v=O_poiix8oLg
 
 # where you want the spindel for the change of your tools
-Y_pos_chang_tool = -1200
-X_pos_chang_tool = -1000
+Y_pos_chang_tool = -500
+X_pos_chang_tool = -500
 Z_pos_chang_tool = 0
 
 # speed of move to reach the above position
@@ -49,23 +50,6 @@ d.setSpindleToolNumber(new_tool)
 
 # Create a message box with 3 buttons and execute probing.py or d.enableMachine(False)
 import tkinter as tk
-
-def show_custom_message_box():
-    global root, message_label
-
-    root = tk.Tk()
-    root.title("m6 tool change")
-
-    # ...
-
-    # Ajoutez ce bloc de code ici, avant le mainloop
-    def on_closing():
-        d.enableMachine(False)  #  désactivez la machine
-        root.destroy()  # Fermez la fenêtre
-    
-    root.protocol("WM_DELETE_WINDOW", on_closing)
-
-    root.mainloop()
 
 def mesurer_outil():
     exec(open('probing.py').read())
