@@ -1,6 +1,6 @@
 import tkinter as tk
-
-initial_time_in_seconds = 60  # Initial configuration in seconds
+print("start")  # print start in debug window
+initial_time_in_seconds = 10  # Initial configuration in seconds
 
 class CountdownApp:
     def __init__(self, root):
@@ -13,10 +13,10 @@ class CountdownApp:
 
         # Calculate position to center the window
         x_position = (screen_width - 200) // 2
-        y_position = (screen_height - 150) // 2  # Adjustment to accommodate font size
+        y_position = (screen_height - 200) // 2  # Adjustment to accommodate the "Skip" button
 
         # Position and resize the window
-        self.root.geometry(f"200x150+{x_position}+{y_position}")
+        self.root.geometry(f"200x200+{x_position}+{y_position}")
 
         # Force the window to stay on top
         self.root.wm_attributes("-topmost", 1)
@@ -29,7 +29,11 @@ class CountdownApp:
         self.countdown_label = tk.Label(self.root, text="", font=("Helvetica", 30), padx=10, pady=10)
         self.countdown_label.pack()
 
-        # Start the countdown automatically
+        # "Skip" button to stop the countdown and close the window
+        skip_button = tk.Button(self.root, text="Skip", command=self.skipCountdownAndClose)
+        skip_button.pack()
+
+        # Automatically start the countdown
         self.startCountdown(seconds=initial_time_in_seconds)
 
     def updateCountdown(self):
@@ -40,7 +44,7 @@ class CountdownApp:
             self.seconds_left -= 1
             self.root.after(1000, self.updateCountdown)  # Update every 1000 milliseconds (1 second)
         else:
-            self.countdown_label.config(text="Countdown finished")
+            self.root.after(100, self.closeWindow)  # Close the window after 0.1 seconds
 
     def startCountdown(self, minutes=None, seconds=None):
         if minutes is not None:
@@ -51,7 +55,19 @@ class CountdownApp:
             raise ValueError("You must provide either 'minutes' or 'seconds' argument.")
         self.updateCountdown()
 
+    def skipCountdownAndClose(self):
+        # Stop updating the countdown
+        self.seconds_left = 0
+        # Close the window after 0.1 seconds
+        self.root.after(100, self.closeWindow)
+
+    def closeWindow(self):
+        # Close the window
+        self.root.destroy()
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = CountdownApp(root)
     root.mainloop()
+
+print("end")
