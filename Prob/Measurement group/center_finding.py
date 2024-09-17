@@ -6,7 +6,7 @@ Probe_Index = 2
 Return_speed = 6000
 
 Probing_velocity = 2000															
-Maximum_distance = 200	
+Maximum_distance = 200	 #attention si vous indiquer une valeur trop grand une erreure peux survenir si vous approcher les soft limit de la machine
 
 # - - - - - - - - - - - - - - - -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  Functions  - - - - - - - - - - - - - - - - -- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 												
 

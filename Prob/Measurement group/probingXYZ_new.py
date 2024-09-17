@@ -197,7 +197,7 @@ def GoTo_Y0():
 window = Tk()																																			
 window.geometry("240x360")																												
 window.title( "Probing 3D" )																													
-
+window.attributes("-topmost", True)
 
 L3 = Label(window, text="Probing velocity", font= ("Times New Roman",12))										
 L3.place(x=20, y=30, height=20, width=100)																						
