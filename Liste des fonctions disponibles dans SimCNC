@@ -1,0 +1,52 @@
+getMISTState() - État du brouillard (MIST).
+getModule(ModuleType type, int ID) - Renvoie un module par type et ID.
+getModuleList() - Liste tous les modules.
+getPosition(CoordMode coordMode) - Renvoie la position actuelle.
+getPositionForGCodeCurrentLine(CoordMode coordMode) - Position cible de la ligne G-code actuelle.
+getPositionForGCodeLine(int number, CoordMode coordMode) - Position cible d’une ligne G-code donnée.
+getPositionIOSignalValue(IOFunctionId signalFunction, int index = 0) - Valeur du signal IO (position).
+getProbingPosition(CoordMode coordMode) - Dernière position de palpage.
+getProfileName() - Nom du profil en cours.
+getRRO() - Override du débit d’avance.
+getRemainingPathTime() - Temps restant estimé pour le parcours.
+getRunningScriptsInfo() - Informations sur les scripts en cours.
+getScreenName() - Nom de l’écran SimCNC en cours.
+getSelectedToolNumber() - Numéro de l’outil sélectionné.
+getSimCncVersion() - Version de SimCNC.
+getSoftLimitState(Axis axis) - État de la limite logicielle (soft limit).
+getSoftLimitValue(Direction direction, Axis axis) - Valeur de limite logicielle.
+getSpindleGear() - Rapport de démultiplication de la broche.
+getSpindleState() - État de la broche.
+getSpindleSpeed() - Vitesse de la broche.
+getSpindleToolNumber() - Outil actuellement chargé sur la broche.
+getSRO() - Override d’avance (%).
+getStartTrajectoryAccessMode() - Mode d’accès à la trajectoire au démarrage.
+getStartTrajectoryMode() - Mode de démarrage de trajectoire.
+getState() - État global de la machine.
+getTangentialAxisEnable() - Axe tangentiel activé.
+getThcState() - État du contrôle de hauteur de torche (THC).
+getToolDiameter(int toolNumber) - Diamètre d’un outil.
+getToolDiameterWear(int toolNumber) - Usure de diamètre.
+getToolLength(int toolNumber) - Longueur de l’outil.
+getToolLengthWear(int toolNumber) - Usure de longueur.
+getToolOffsetNumber() - Numéro d’offset outil.
+getToolOffsetUse() - Utilisation d’offset outil.
+getTrajectoryPause() - Pause de la trajectoire.
+getUsingRam() - Utilisation mémoire (RAM).
+getFeedrate() - Avance actuelle (mm/min).
+getWRO() - Work offset override.
+getWorkOffset(int workOffsetIndex) - Récupère un offset de travail.
+getWorkOffsetNumber() - Numéro d’offset de travail.
+getAnalogIOSignalValue(IOFunctionId signalFunction, int index = 0) - Valeur d’entrée analogique.
+getAngleIOSignalValue(IOFunctionId signalFunction, int index = 0) - Valeur d’entrée d’angle.
+getCalculatedPathTime() - Temps estimé du chemin.
+getCurrentAxisVelocity(Axis axis) - Vitesse actuelle sur un axe.
+getCurrentScriptInfo() - Infos sur le script courant.
+getCurrentWorkOffset() - Offset de travail actif.
+getCurrentXYZVelocity() - Vitesse XYZ combinée.
+getDeviceInfo() - Infos de l'appareil.
+getDeviceName() - Nom du contrôleur SimCNC.
+getDigitalIOSignalValue(IOFunctionId signalFunction, int index = 0) - Valeur d’entrée/sortie digitale.
+getGCodeCurrentLine() - Texte de la ligne G-code en cours.
+getGCodeCurrentLineNumber() - Numéro de la ligne G-code en cours.
+getGCodeFilePath() - Chemin du fichier G-code en cours.
